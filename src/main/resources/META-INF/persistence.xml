@@ -8,12 +8,12 @@
     <persistence-unit name="telePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>com.teleexpertise.model.User</class>
-        <class>com.teleexpertise.model.Infirmier</class>
-        <class>com.teleexpertise.model.MedecinGeneraliste</class>
-        <class>com.teleexpertise.model.Patient</class>
-        <class>com.teleexpertise.model.Consultation</class>
-        <class>com.teleexpertise.model.ActeTechnique</class>
+        <class>org.example.projet.model.User</class>
+        <class>org.example.projet.model.Infirmier</class>
+        <class>org.example.projet.model.MedecinGeneraliste</class>
+        <class>org.example.projet.model.Patient</class>
+        <class>org.example.projet.model.Consultation</class>
+        <class>org.example.projet.model.ActeTechnique</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/teleexpertise"/>
