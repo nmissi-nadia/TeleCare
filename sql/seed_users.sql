@@ -1,0 +1,3 @@
+-- To create initial user, run HashPasswordMain to produce BCrypt hash for 'admin123'
+-- Then insert into users table (table will be created by JPA), example:
+-- INSERT INTO users (nom, prenom, login, motDePasse, role, user_type) VALUES ('Admin','App','admin','<hash>','INFIRMIER','INFIRMIER');
