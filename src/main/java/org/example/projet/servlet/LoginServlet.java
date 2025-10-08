@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = req.getSession(true);
             session.setAttribute("currentUser", u);
             session.setAttribute("csrfToken", java.util.UUID.randomUUID().toString());
-            resp.sendRedirect(req.getContextPath() + "/app/patient");
+            resp.sendRedirect(req.getContextPath() + "/jsp/home.jsp");
         } else {
             req.setAttribute("error", "Login ou mot de passe incorrect");
             req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
