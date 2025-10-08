@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 
 public class JPAUtil {
     private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("telePU"); // même nom que dans persistence.xml
+            Persistence.createEntityManagerFactory("telePU"); 
 
     public static EntityManager getEntityManager() {
         return emf.createEntityManager();

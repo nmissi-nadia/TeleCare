@@ -31,6 +31,6 @@ public class DemandeExpertise {
     public void setStatut(String s){this.statut=s;}
     public Consultation getConsultation(){return consultation;}
     public void setConsultation(Consultation c){this.consultation=c;}
-    //public MedecinSpecialiste getSpecialiste(){return specialiste;}
-    //public void setSpecialiste(MedecinSpecialiste m){this.specialiste=m;}
+    public MedecinSpecialiste getSpecialiste(){return specialiste;}
+    public void setSpecialiste(MedecinSpecialiste m){this.specialiste=m;}
 }
