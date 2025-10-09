@@ -6,8 +6,8 @@
 <head>
     <title>Dashboard Infirmier - TeleCare</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .container { margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
         .header { background: #28a745; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: #f8f9fa; padding: 15px; text-align: center; border-radius: 5px; }

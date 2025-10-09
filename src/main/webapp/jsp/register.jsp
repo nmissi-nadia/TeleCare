@@ -66,8 +66,14 @@
     </label>
     <small>8 caractères minimum, avec majuscule et chiffre</small><br><br>
 
+
     <br><br>
     <button type="submit">S'inscrire</button>
+    <p style="text-align: center; margin-top: 15px;">
+        <a href="${pageContext.request.contextPath}/jsp/login.jsp" style="color: #667eea; text-decoration: none;">
+            ← Retour à la connexion
+        </a>
+    </p>
 </form>
 
 </body>
