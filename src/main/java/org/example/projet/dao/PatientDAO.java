@@ -34,15 +34,9 @@ public class PatientDAO {
             em.close();
         }
     }
+
     public List<Patient> listerPatients() {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            // Récupérer TOUS les patients (pas seulement ceux du jour)
-            return em.createQuery("SELECT p FROM Patient p ORDER BY p.heureArrivee DESC", Patient.class)
-                    .getResultList();
-        } finally {
-            em.close();
-        }
+        return null;
     }
 
     public Patient findById(Long id) {

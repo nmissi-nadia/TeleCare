@@ -11,13 +11,35 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UserDAO userDAO = new UserDAO();
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Récupérer et afficher le message de succès s'il existe
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            String successMessage = (String) session.getAttribute("successMessage");
+            if (successMessage != null) {
+                req.setAttribute("successMessage", successMessage);
+                // Nettoyer le message après l'avoir récupéré
+                session.removeAttribute("successMessage");
+            }
+        }
+
         req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
     }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String pass = req.getParameter("password");
-        User u = userDAO.findByLogin(login);
+
+        // Validation basique
+        if (login == null || login.trim().isEmpty() || pass == null || pass.trim().isEmpty()) {
+            req.setAttribute("error", "Veuillez saisir votre login et mot de passe");
+            req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+            return;
+        }
+
+        User u = userDAO.findByLogin(login.trim());
+
         if (u != null && SecurityUtil.verify(pass, u.getMotDePasse())) {
             HttpSession session = req.getSession(true);
             session.setAttribute("currentUser", u);
