@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+
+<%
+
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+%>
 
 <html>
 <head>
@@ -26,106 +31,115 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>Consultation Médicale</h2>
-        </div>
-
-        <c:choose>
-            <c:when test="${empty patient}">
-                <p style="text-align: center; color: red;">Erreur: Aucun patient spécifié</p>
-                <a href="${pageContext.request.contextPath}/app/patient" class="btn">Retour</a>
-            </c:when>
-            <c:otherwise>
-                <div class="patient-info">
-                    <h3>👨‍⚕️ Patient: ${patient.nom} ${patient.prenom}</h3>
-                    <p><strong>ID:</strong> #${patient.id}</p>
-                    <p><strong>Arrivée:</strong> <fmt:formatDate value="${patient.heureArrivee}" pattern="dd/MM/yyyy HH:mm" /></p>
-                    <c:if test="${not empty patient.tension}">
-                        <p><strong>Tension:</strong> ${patient.tension}</p>
-                    </c:if>
-                    <c:if test="${not empty patient.frequenceCardiaque}">
-                        <p><strong>FC:</strong> ${patient.frequenceCardiaque} bpm</p>
-                    </c:if>
-                </div>
-
-                <form action="${pageContext.request.contextPath}/app/consultation" method="post">
-                    <input type="hidden" name="patientId" value="${patient.id}" />
-                    <input type="hidden" name="csrf" value="${sessionScope.csrfToken}" />
-
-                    <div class="form-section">
-                        <h3>Informations Consultation</h3>
-                        <div class="form-row">
-                            <div>
-                                <label>Observations:</label>
-                                <textarea name="observations" required></textarea>
-                            </div>
-                            <div>
-                                <label>Diagnostic:</label>
-                                <textarea name="diagnostic" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h3>Actes Techniques</h3>
-                        <div class="actes-grid">
-                            <c:forEach var="acte" items="${actes}">
-                                <div class="acte-item" onclick="toggleActe(this)" data-id="${acte.id}">
-                                    ${acte.libelle} - ${acte.tarif} €
-                                </div>
-                            </c:forEach>
-                        </div>
-                        <div class="total-cout">Total: <span id="total">0.00</span> €</div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button type="submit" class="btn btn-success">Terminer Consultation</button>
-                        <a href="${pageContext.request.contextPath}/app/patient" class="btn" style="background: #6c757d;">Annuler</a>
-                    </div>
-                </form>
-            </c:otherwise>
-        </c:choose>
+<div class="container">
+    <div class="header">
+        <h2>Consultation Médicale</h2>
     </div>
 
-    <script>
-        let selectedActes = [];
-        let total = 0;
+    <c:choose>
+        <c:when test="${empty patient}">
+            <p style="text-align: center; color: red;">Erreur: Aucun patient spécifié</p>
+            <a href="${pageContext.request.contextPath}/app/patient" class="btn">Retour</a>
+        </c:when>
 
-        function toggleActe(element) {
-            const acteId = element.getAttribute('data-id');
-            const isSelected = selectedActes.includes(acteId);
+        <c:otherwise>
+            <div class="patient-info">
+                <h3>👨‍⚕️ Patient: ${patient.nom} ${patient.prenom}</h3>
+                <p><strong>ID:</strong> #${patient.id}</p>
 
-            if (isSelected) {
-                selectedActes = selectedActes.filter(id => id !== acteId);
-                element.classList.remove('selected');
-            } else {
-                selectedActes.push(acteId);
-                element.classList.add('selected');
-            }
+                <p><strong>Arrivée:</strong>
+                    <%
+                        org.example.projet.model.Patient pat = (org.example.projet.model.Patient) pageContext.findAttribute("patient");
+                        if (pat.getHeureArrivee() != null) {
+                            out.print(pat.getHeureArrivee().format(dateTimeFormatter));
+                        } else {
+                            out.print("<span style='color: #999;'>Non définie</span>");
+                        }
+                    %>
+                </p>
 
-            // Calcul du total
-            total = 0;
-            document.querySelectorAll('.acte-item.selected').forEach(item => {
-                const tarif = parseFloat(item.textContent.match(/(\d+\.?\d*)/)[1]);
-                total += tarif;
-            });
+                <c:if test="${not empty patient.tension}">
+                    <p><strong>Tension:</strong> ${patient.tension}</p>
+                </c:if>
+                <c:if test="${not empty patient.frequenceCardiaque}">
+                    <p><strong>FC:</strong> ${patient.frequenceCardiaque} bpm</p>
+                </c:if>
+            </div>
 
-            document.getElementById('total').textContent = total.toFixed(2);
+            <form action="${pageContext.request.contextPath}/app/consultation" method="post">
+                <input type="hidden" name="patientId" value="${patient.id}" />
+                <input type="hidden" name="csrf" value="${sessionScope.csrfToken}" />
+
+                <div class="form-section">
+                    <h3>Informations Consultation</h3>
+                    <div class="form-row">
+                        <div>
+                            <label>Observations:</label>
+                            <textarea name="observations" required></textarea>
+                        </div>
+                        <div>
+                            <label>Diagnostic:</label>
+                            <textarea name="diagnostic" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Actes Techniques</h3>
+                    <div class="actes-grid">
+                        <c:forEach var="acte" items="${actes}">
+                            <div class="acte-item" onclick="toggleActe(this)" data-id="${acte.id}">
+                                    ${acte.libelle} - ${acte.tarif} €
+                            </div>
+                        </c:forEach>
+                    </div>
+                    <div class="total-cout">Total: <span id="total">0.00</span> €</div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Terminer Consultation</button>
+                    <a href="${pageContext.request.contextPath}/app/patient" class="btn" style="background: #6c757d;">Annuler</a>
+                </div>
+            </form>
+        </c:otherwise>
+    </c:choose>
+</div>
+
+<script>
+    let selectedActes = [];
+    let total = 0;
+
+    function toggleActe(element) {
+        const acteId = element.getAttribute('data-id');
+        const isSelected = selectedActes.includes(acteId);
+
+        if (isSelected) {
+            selectedActes = selectedActes.filter(id => id !== acteId);
+            element.classList.remove('selected');
+        } else {
+            selectedActes.push(acteId);
+            element.classList.add('selected');
         }
 
-        // Ajouter les actes au formulaire avant soumission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            document.querySelectorAll('input[name="actes"]').forEach(input => input.remove());
-
-            selectedActes.forEach(acteId => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'actes';
-                input.value = acteId;
-                this.appendChild(input);
-            });
+        total = 0;
+        document.querySelectorAll('.acte-item.selected').forEach(item => {
+            const tarif = parseFloat(item.textContent.match(/(\d+\.?\d*)/)[1]);
+            total += tarif;
         });
-    </script>
+
+        document.getElementById('total').textContent = total.toFixed(2);
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelectorAll('input[name="actes"]').forEach(input => input.remove());
+        selectedActes.forEach(acteId => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'actes';
+            input.value = acteId;
+            this.appendChild(input);
+        });
+    });
+</script>
 </body>
 </html>

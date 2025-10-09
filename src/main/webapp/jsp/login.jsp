@@ -107,7 +107,6 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">🏥</div>
         <h2>Connexion à TeleCare</h2>
 
         <c:if test="${not empty error}">

@@ -7,7 +7,7 @@
     <title>Dashboard Infirmier - TeleCare</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .container { margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+
         .header { background: #28a745; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: #f8f9fa; padding: 15px; text-align: center; border-radius: 5px; }
@@ -55,12 +55,8 @@
                                 <td>#${p.id}</td>
                                 <td><strong>${p.nom} ${p.prenom}</strong></td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${not empty p.heureArrivee}">
-                                            <fmt:formatDate value="${p.heureArrivee}" pattern="HH:mm" />
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
+                                    heure ici
+                                    
                                 </td>
                                 <td><span class="status status-${p.statut}">${p.statut}</span></td>
                                 <td>

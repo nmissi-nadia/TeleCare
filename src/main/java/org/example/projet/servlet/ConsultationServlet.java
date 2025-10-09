@@ -19,7 +19,7 @@ public class ConsultationServlet extends jakarta.servlet.http.HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pid = req.getParameter("patientId");
         if (pid != null) {
-            Patient p = patientDAO.listerPatientsDuJour().stream().filter(x -> x.getId().toString().equals(pid)).findFirst().orElse(null);
+            Patient p = patientDAO.listerPatients().stream().filter(x -> x.getId().toString().equals(pid)).findFirst().orElse(null);
             req.setAttribute("patient", p);
             req.getRequestDispatcher("/jsp/consultation_form.jsp").forward(req, resp);
             return;
@@ -36,7 +36,7 @@ public class ConsultationServlet extends jakarta.servlet.http.HttpServlet {
         String patientId = req.getParameter("patientId");
         String observations = req.getParameter("observations");
         String diagnostic = req.getParameter("diagnostic");
-        Patient p = patientDAO.listerPatientsDuJour().stream().filter(x -> x.getId().toString().equals(patientId)).findFirst().orElse(null);
+        Patient p = patientDAO.listerPatients().stream().filter(x -> x.getId().toString().equals(patientId)).findFirst().orElse(null);
         if (p == null) { resp.sendRedirect(req.getContextPath()+"/app/patient"); return; }
         Consultation c = new Consultation();
         c.setPatient(p);

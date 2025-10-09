@@ -14,7 +14,7 @@ public class PatientServlet extends jakarta.servlet.http.HttpServlet {
     private PatientDAO dao = new PatientDAO();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Patient> patients = dao.listerPatientsDuJour();
+        List<Patient> patients = dao.listerPatients();
         req.setAttribute("patients", patients);
         req.getRequestDispatcher("/jsp/patient_list.jsp").forward(req, resp);
     }

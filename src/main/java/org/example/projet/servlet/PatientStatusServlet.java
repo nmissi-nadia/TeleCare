@@ -29,7 +29,7 @@ public class PatientStatusServlet extends HttpServlet {
         }
 
         // Récupérer les patients du jour
-        List<Patient> patients = patientDAO.listerPatientsDuJour();
+        List<Patient> patients = patientDAO.listerPatients();
 
         // Retourner les données en JSON
         resp.setContentType("application/json");
