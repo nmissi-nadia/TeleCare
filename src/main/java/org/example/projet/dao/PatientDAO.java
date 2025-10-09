@@ -34,4 +34,13 @@ public class PatientDAO {
             em.close();
         }
     }
+
+    public Patient findById(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.find(Patient.class, id);
+        } finally {
+            em.close();
+        }
+    }
 }

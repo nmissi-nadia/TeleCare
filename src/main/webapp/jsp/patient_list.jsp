@@ -179,14 +179,17 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <fmt:formatDate value="${p.heureArrivee}" pattern="HH:mm" />
-                                        <br>
-                                        <small><fmt:formatDate value="${p.heureArrivee}" pattern="dd/MM/yyyy" /></small>
-                                    </td>
-                                    <td>
-                                        <span class="status status-${p.statut}">${p.statut}</span>
-                                    </td>
-                                    <td>
+                                      <c:choose>
+                                          <c:when test="${not empty p.heureArrivee}">
+                                              <fmt:formatDate value="${p.heureArrivee}" pattern="HH:mm" />
+                                              <br>
+                                              <small><fmt:formatDate value="${p.heureArrivee}" pattern="dd/MM/yyyy" /></small>
+                                          </c:when>
+                                          <c:otherwise>
+                                              <span style="color: #999;">Non définie</span>
+                                          </c:otherwise>
+                                      </c:choose>
+                                  </td>
                                         <c:choose>
                                             <c:when test="${p.statut == 'EN_ATTENTE'}">
                                                 <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}"
