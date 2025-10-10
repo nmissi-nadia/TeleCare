@@ -12,8 +12,8 @@
     <title>Consultation - TeleCare</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
-        .header { background: #007bff; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .container { max-width:100%; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { background: #6d26de; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .patient-info { background: #e3f2fd; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
         .form-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }

@@ -6,31 +6,68 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "demandes_expertise")
 public class DemandeExpertise {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dateDemande;
-    private String question;
-    private String priorite;
-    private String statut;
+
+    @Column
+    private String raison;
+
+    @Column
+    private String specialiteDemandee;
+
+    @Column
+    private String statut; // EN_ATTENTE, ACCEPTEE, REFUSEE
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private LocalDateTime dateReponse;
+
     @OneToOne
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
+
     @ManyToOne
-    @JoinColumn(name = "specialiste_id")
-    private MedecinSpecialiste specialiste;
-    // getters/setters
-    public Long getId(){return id;}
-    public void setId(Long id){this.id=id;}
-    public LocalDateTime getDateDemande(){return dateDemande;}
-    public void setDateDemande(LocalDateTime d){this.dateDemande=d;}
-    public String getQuestion(){return question;}
-    public void setQuestion(String q){this.question=q;}
-    public String getPriorite(){return priorite;}
-    public void setPriorite(String p){this.priorite=p;}
-    public String getStatut(){return statut;}
-    public void setStatut(String s){this.statut=s;}
-    public Consultation getConsultation(){return consultation;}
-    public void setConsultation(Consultation c){this.consultation=c;}
-    public MedecinSpecialiste getSpecialiste(){return specialiste;}
-    public void setSpecialiste(MedecinSpecialiste m){this.specialiste=m;}
+    @JoinColumn(name = "medecin_generaliste_id")
+    private MedecinGeneraliste medecinGeneraliste;
+
+    @ManyToOne
+    @JoinColumn(name = "medecin_specialiste_id")
+    private MedecinSpecialiste medecinSpecialiste;
+
+    // Constructeurs
+    public DemandeExpertise() {
+        this.dateCreation = LocalDateTime.now();
+        this.statut = "EN_ATTENTE";
+    }
+
+    // Getters et Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getRaison() { return raison; }
+    public void setRaison(String raison) { this.raison = raison; }
+
+    public String getSpecialiteDemandee() { return specialiteDemandee; }
+    public void setSpecialiteDemandee(String specialiteDemandee) { this.specialiteDemandee = specialiteDemandee; }
+
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
+
+    public LocalDateTime getDateCreation() { return dateCreation; }
+    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
+
+    public LocalDateTime getDateReponse() { return dateReponse; }
+    public void setDateReponse(LocalDateTime dateReponse) { this.dateReponse = dateReponse; }
+
+    public Consultation getConsultation() { return consultation; }
+    public void setConsultation(Consultation consultation) { this.consultation = consultation; }
+
+    public MedecinGeneraliste getMedecinGeneraliste() { return medecinGeneraliste; }
+    public void setMedecinGeneraliste(MedecinGeneraliste medecinGeneraliste) { this.medecinGeneraliste = medecinGeneraliste; }
+
+    public MedecinSpecialiste getMedecinSpecialiste() { return medecinSpecialiste; }
+    public void setMedecinSpecialiste(MedecinSpecialiste medecinSpecialiste) { this.medecinSpecialiste = medecinSpecialiste; }
 }

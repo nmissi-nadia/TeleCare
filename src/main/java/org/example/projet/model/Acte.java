@@ -3,8 +3,8 @@ package org.example.projet.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "actes_techniques")
-public class ActeTechnique {
+@Table(name = "actes")
+public class Acte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +19,12 @@ public class ActeTechnique {
     private String description;
 
     @Column
-    private String categorie;
+    private String categorie; // CONSULTATION, ANALYSE, RADIOLOGIE, etc.
 
     // Constructeurs
-    public ActeTechnique() {}
+    public Acte() {}
 
-    public ActeTechnique(String libelle, Double tarif, String categorie) {
+    public Acte(String libelle, Double tarif, String categorie) {
         this.libelle = libelle;
         this.tarif = tarif;
         this.categorie = categorie;

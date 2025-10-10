@@ -47,4 +47,23 @@ public class PatientDAO {
             em.close();
         }
     }
+    public List<Patient> listerPatientsEnAttente() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Patient p WHERE p.statut = 'EN_ATTENTE' ORDER BY p.heureArrivee", Patient.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    public void updateStatut(Patient p) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(p);
+            em.getTransaction().commit();
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
 }

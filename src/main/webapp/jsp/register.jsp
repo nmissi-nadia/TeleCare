@@ -8,8 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -164,7 +163,6 @@
 </head>
 <body>
     <div class="register-container">
-        <div class="logo">🏥</div>
         <h1>Créer votre compte TeleCare</h1>
 
         <c:if test="${not empty error}">
@@ -185,9 +183,9 @@
             </div>
 
             <!-- Section Rôle -->
-            <h2>Choisir votre rôle</h2>
+            <h2><label>Votre fonction médicale <span class="required">*</span> :</label></h2>
             <div class="form-section">
-                <label>Votre fonction médicale <span class="required">*</span> :</label>
+
                 <input type="hidden" name="role" id="selectedRole" required>
 
                 <div class="role-selection">

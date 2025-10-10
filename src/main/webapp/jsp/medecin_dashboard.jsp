@@ -1,14 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+
+<%
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+%>
 
 <html>
 <head>
     <title>Dashboard Médecin - TeleCare</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
-        .header { background: #007bff; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .container { max-width: 100%; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { background: #6200ff; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: #f8f9fa; padding: 15px; text-align: center; border-radius: 5px; }
         .stat-number { font-size: 24px; font-weight: bold; color: #007bff; }
@@ -55,16 +59,20 @@
                                 <td>#${p.id}</td>
                                 <td><strong>${p.nom} ${p.prenom}</strong></td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${not empty p.heureArrivee}">
-                                            <fmt:formatDate value="${p.heureArrivee}" pattern="HH:mm" />
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
+                                    <%
+                                        org.example.projet.model.Patient patientObj =
+                                            (org.example.projet.model.Patient) pageContext.getAttribute("p");
+                                        if (patientObj != null && patientObj.getHeureArrivee() != null) {
+                                            out.print(patientObj.getHeureArrivee().format(timeFormatter));
+                                        } else {
+                                            out.print("-");
+                                        }
+                                    %>
                                 </td>
                                 <td><span class="status status-${p.statut}">${p.statut}</span></td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-success">Consulter</a>
+                                    <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}"
+                                       class="btn btn-success">Consulter</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -86,7 +94,17 @@
                             <tr>
                                 <td>#${c.patient.id}</td>
                                 <td><strong>${c.patient.nom} ${c.patient.prenom}</strong></td>
-                                <td><fmt:formatDate value="${c.dateConsultation}" pattern="HH:mm" /></td>
+                                <td>
+                                    <%
+                                        org.example.projet.model.Consultation cons =
+                                            (org.example.projet.model.Consultation) pageContext.getAttribute("c");
+                                        if (cons != null && cons.getDateConsultation() != null) {
+                                            out.print(cons.getDateConsultation().format(timeFormatter));
+                                        } else {
+                                            out.print("-");
+                                        }
+                                    %>
+                                </td>
                                 <td><span class="status status-${c.statut}">${c.statut}</span></td>
                             </tr>
                         </c:forEach>
