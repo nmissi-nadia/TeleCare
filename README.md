@@ -76,7 +76,7 @@ telecare/
 ## 🧠 Conception du système
 
 ### 🔹 Diagramme conceptuel simplifié (textuel)
-
+````mermaid
 classDiagram
     class User {
         - int id
@@ -157,7 +157,7 @@ classDiagram
     DemandeExpertise "1" --> "1" MedecinSpecialiste : attribuée_à >
     Consultation "1" --> "0..*" ActeTechnique : comprend >
 
-
+````
 ---
 
 ## 👩‍⚕️ Modules Fonctionnels
