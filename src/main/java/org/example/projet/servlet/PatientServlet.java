@@ -78,7 +78,6 @@ public class PatientServlet extends jakarta.servlet.http.HttpServlet {
                 LocalDateTime heureArrivee = LocalDateTime.parse(heureArriveeStr);
                 p.setHeureArrivee(heureArrivee);
             } catch (Exception e) {
-                // Si le format n'est pas correct, utiliser l'heure actuelle
                 p.setHeureArrivee(LocalDateTime.now());
             }
         } else {
@@ -94,6 +93,12 @@ public class PatientServlet extends jakarta.servlet.http.HttpServlet {
         }
 
         dao.ajouter(p);
-        resp.sendRedirect(req.getContextPath() + "/app/patient");
+            // Redirection intelligente vers la page précédente ou liste des patients
+            String redirectUrl = req.getParameter("redirectUrl");
+            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                resp.sendRedirect(redirectUrl);
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/app/patient");
+            }
     }
 }

@@ -98,8 +98,7 @@
 
                 <div style="text-align: center; margin-top: 20px;">
                     <button type="submit" class="btn btn-success">Terminer Consultation</button>
-                    <a href="${pageContext.request.contextPath}/app/patient" class="btn" style="background: #6c757d;">Annuler</a>
-                </div>
+                    <button type="button" class="btn" style="background: #6c757d;" onclick="window.history.back()">Annuler</button>                </div>
             </form>
         </c:otherwise>
     </c:choose>
