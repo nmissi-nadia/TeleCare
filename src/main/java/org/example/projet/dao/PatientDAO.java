@@ -36,7 +36,13 @@ public class PatientDAO {
     }
 
     public List<Patient> listerPatients() {
-        return null;
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Patient p ORDER BY p.heureArrivee", Patient.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     public Patient findById(Long id) {

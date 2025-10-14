@@ -6,6 +6,7 @@ import org.example.projet.dao.PatientDAO;
 import org.example.projet.dao.UserDAO;
 import org.example.projet.model.Acte;
 import org.example.projet.model.Consultation;
+import org.example.projet.model.DemandeExpertise;
 import org.example.projet.model.Patient;
 import org.example.projet.model.User;
 import jakarta.servlet.ServletException;
@@ -56,7 +57,7 @@ public class ConsultationServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("currentUser") == null) {
             resp.sendRedirect(req.getContextPath() + "/jsp/login.jsp");
@@ -64,21 +65,22 @@ public class ConsultationServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!("MEDECIN_GENERALISTE".equals(currentUser.getRole()) || "MEDECIN_SPECIALISTE".equals(currentUser.getRole()))) {
-            resp.sendError(403, "Accès refusé - Réservé aux médecins");
+        if (!"MEDECIN_GENERALISTE".equals(currentUser.getRole()) && !"MEDECIN_SPECIALISTE".equals(currentUser.getRole())) {
+            resp.sendError(403, "Accès refusé");
             return;
         }
 
         String patientIdParam = req.getParameter("patientId");
+        String consultationType = req.getParameter("type");
         String observations = req.getParameter("observations");
         String diagnostic = req.getParameter("diagnostic");
         String traitement = req.getParameter("traitement");
-        String statut = req.getParameter("statut");
+        String raison = req.getParameter("raison");
+        String specialite = req.getParameter("specialite");
         String[] actesIds = req.getParameterValues("actes");
 
-        // Validation basique
-        if (patientIdParam == null || observations == null || diagnostic == null) {
-            req.setAttribute("error", "Tous les champs obligatoires doivent être remplis");
+        if (patientIdParam == null || consultationType == null) {
+            req.setAttribute("error", "Informations manquantes");
             doGet(req, resp);
             return;
         }
@@ -96,37 +98,97 @@ public class ConsultationServlet extends HttpServlet {
             Consultation consultation = new Consultation();
             consultation.setPatient(patient);
             consultation.setMedecin(currentUser);
-            consultation.setObservations(observations);
-            consultation.setDiagnostic(diagnostic);
-            consultation.setTraitement(traitement);
-            consultation.setStatut(statut != null ? statut : "EN_COURS");
 
-            // Ajouter les actes sélectionnés
-            if (actesIds != null) {
-                for (String acteId : actesIds) {
-                    Acte acte = acteDAO.findById(Long.parseLong(acteId));
-                    if (acte != null) {
-                        consultation.ajouterActe(acte);
+            // Gestion selon le type de consultation
+            switch (consultationType) {
+                case "DIRECTE":
+                    if (observations == null || diagnostic == null || traitement == null) {
+                        req.setAttribute("error", "Tous les champs sont obligatoires pour une consultation directe");
+                        doGet(req, resp);
+                        return;
                     }
-                }
+                    consultation.setObservations(observations);
+                    consultation.setDiagnostic(diagnostic);
+                    consultation.setTraitement(traitement);
+                    consultation.setStatut("TERMINE");
+
+                    // Ajouter les actes si sélectionnés
+                    if (actesIds != null) {
+                        for (String acteId : actesIds) {
+                            Acte acte = acteDAO.findById(Long.parseLong(acteId));
+                            if (acte != null) {
+                                consultation.ajouterActe(acte);
+                            }
+                        }
+                    }
+
+                    patient.setStatut("TERMINE");
+                    break;
+
+                case "EXPERTISE":
+                    if (observations == null || diagnostic == null || raison == null || specialite == null) {
+                        req.setAttribute("error", "Tous les champs sont obligatoires pour une demande d'expertise");
+                        doGet(req, resp);
+                        return;
+                    }
+
+                    // Créer une demande d'expertise
+                    DemandeExpertise demande = new DemandeExpertise();
+                    demande.setConsultation(consultation);
+                    demande.setMedecinGeneraliste((org.example.projet.model.MedecinGeneraliste) currentUser);
+                    demande.setRaison(raison);
+                    demande.setSpecialiteDemandee(specialite);
+                    demande.setStatut("EN_ATTENTE");
+                    // demande.setObservations(observations);
+                    // demande.setDiagnostic(diagnostic);
+
+                    // demandeExpertiseDAO.ajouter(demande);
+
+                    consultation.setObservations(observations);
+                    consultation.setDiagnostic(diagnostic);
+                    consultation.setStatut("EN_ATTENTE_EXPERTISE");
+                    patient.setStatut("EN_ATTENTE_EXPERTISE");
+                    break;
+
+                case "ANNULATION":
+                    if (raison == null) {
+                        req.setAttribute("error", "La raison d'annulation est obligatoire");
+                        doGet(req, resp);
+                        return;
+                    }
+
+                    consultation.setObservations("Consultation annulée: " + raison);
+                    consultation.setStatut("ANNULEE");
+                    patient.setStatut("EN_ATTENTE");
+                    break;
+
+                default:
+                    req.setAttribute("error", "Type de consultation invalide");
+                    doGet(req, resp);
+                    return;
             }
 
             consultationDAO.ajouter(consultation);
-
-            if ("TERMINE".equals(consultation.getStatut())) {
-                patient.setStatut("TERMINE");
-                patientDAO.updateStatut(patient);
-            } else {
-                patient.setStatut("EN_COURS");
-                patientDAO.updateStatut(patient);
+            patientDAO.updateStatut(patient);
+            String message = "";
+            switch (consultationType) {
+                case "DIRECTE":
+                    message = "Consultation directe terminée avec succès";
+                    break;
+                case "EXPERTISE":
+                    message = "Demande d'expertise envoyée";
+                    break;
+                case "ANNULATION":
+                    message = "Consultation annulée";
+                    break;
             }
 
-            resp.sendRedirect(req.getContextPath() + "/app/medecin/dashboard");
+            resp.sendRedirect(req.getContextPath() + "/app/medecin/dashboard?success=" + java.net.URLEncoder.encode(message, "UTF-8"));
 
         } catch (NumberFormatException e) {
-            resp.sendError(400, "Données de formulaire invalides");
+            resp.sendError(400, "Données invalides");
         } catch (Exception e) {
-            req.setAttribute("error", "Erreur lors de la création de la consultation: " + e.getMessage());
+            req.setAttribute("error", "Erreur: " + e.getMessage());
             doGet(req, resp);
         }
     }
