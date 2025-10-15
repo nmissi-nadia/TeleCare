@@ -383,10 +383,10 @@
                     dashboardUrl = "/infirmier_dashboard";
                 }
             %>
-                <a href="<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
+                <a href="projet_war_exploded/jsp/<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
             <% } else { %>
-                <a href="/login" class="btn btn-primary">Connexion</a>
-                <a href="/register" class="btn btn-secondary">Inscription</a>
+                <a href="projet_war_exploded/jsp/login" class="btn btn-primary">Connexion</a>
+                <a href="projet_war_exploded/jsp/register" class="btn btn-secondary">Inscription</a>
             <% } %>
         </nav>
     </div>
@@ -404,7 +404,7 @@
             et un suivi patient de qualité supérieure
         </p>
         <div class="hero-buttons">
-            <a href="/register" class="btn btn-primary">Commencer Gratuitement</a>
+            <a href="projet_war_exploded/jsp/register" class="btn btn-primary">Commencer Gratuitement</a>
             <a href="#features" class="btn btn-secondary">Découvrir Plus</a>
         </div>
         <div class="hero-image">

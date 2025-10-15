@@ -59,12 +59,12 @@
 
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #15e40e;
         }
 
         .btn {
             width: 100%;
-            background: #667eea;
+            background: #059669;
             color: white;
             padding: 12px;
             border: none;
@@ -75,7 +75,7 @@
         }
 
         .btn:hover {
-            background: #5a67d8;
+            background: #15e40e;
         }
 
         .error-message {
@@ -96,7 +96,7 @@
         }
 
         .register-link a {
-            color: #667eea;
+            color: #15e40e;
             text-decoration: none;
         }
 

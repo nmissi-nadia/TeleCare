@@ -66,7 +66,7 @@
 
         input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #059669;
         }
 
         .role-selection {
@@ -87,13 +87,13 @@
         }
 
         .role-option:hover {
-            border-color: #667eea;
+            border-color: #059669;
             background: #e3f2fd;
         }
 
         .role-option.selected {
-            border-color: #667eea;
-            background: #667eea;
+            border-color: #15e40e;
+            background: #059669;
             color: white;
         }
 
