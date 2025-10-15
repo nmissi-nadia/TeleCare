@@ -44,7 +44,16 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = req.getSession(true);
             session.setAttribute("currentUser", u);
             session.setAttribute("csrfToken", java.util.UUID.randomUUID().toString());
-            resp.sendRedirect(req.getContextPath() + "/jsp/home.jsp");
+            //redirection d'apres le role vers la page conceérné
+            if ("INFIRMIER".equals(u.getRole())) {
+                resp.sendRedirect(req.getContextPath() + "/app/infirmier/dashboard");
+            } else if ("SPECIALISTE".equals(u.getRole())) {
+                resp.sendRedirect(req.getContextPath() + "/app/specialiste/dashboard");
+            } else if ("GENERALISTE".equals(u.getRole())) {
+                resp.sendRedirect(req.getContextPath() + "/app/generaliste/dashboard");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/jsp/home.jsp");
+            }
         } else {
             req.setAttribute("error", "Login ou mot de passe incorrect");
             req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);

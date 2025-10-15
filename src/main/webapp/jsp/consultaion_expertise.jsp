@@ -5,31 +5,39 @@
 <head>
     <title>Consultation d'Expertise - TeleCare</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        :root {
+            --success-green: #4CAF50;     
+            --neutral-gray: #059669;      
+            --light-gray: #F5F5F5;        
+            --white: #FFFFFF;             
+            --dark-gray: #424242;         
+        }
+
+        body { font-family: Arial, sans-serif; margin: 20px; background: var(--light-gray); }
         .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 8px; }
-        .header { background: #9613d2; color: white; padding: 20px; border-radius: 8px 8px 0 0; margin: -25px -25px 25px -25px; }
+        .header { background: var(--neutral-gray); color: white; padding: 20px; border-radius: 8px 8px 0 0; margin: -25px -25px 25px -25px; }
         .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
         .form-group { margin: 10px 0; }
         label { display: block; font-weight: bold; margin-bottom: 5px; }
         input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
         textarea { height: 100px; }
-        .btn { padding: 10px 15px; background: #9613d2; color: white; border: none; margin: 5px; border-radius: 4px; }
-        .patient-info { background: #e3f2fd; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .btn { padding: 10px 15px; background: var(--success-green); color: white; border: none; margin: 5px; border-radius: 4px; }
+        .patient-info { background: var(--light-gray); padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .actes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin: 15px 0; }
         .acte-item { padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
-        .acte-item:hover { background: #e8f5e8; }
-        .acte-item.selected { background: #c8e6c9; border-color: #9613d2; }
+        .acte-item:hover { background: var(--light-gray); }
+        .acte-item.selected { background: var(--success-green); border-color: var(--success-green); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h2>🏥 Consultation d'Expertise Spécialisée</h2>
+            <h2> Consultation d'Expertise Spécialisée</h2>
             <p><strong>Spécialiste:</strong> ${currentUser.prenom} ${currentUser.nom}</p>
         </div>
 
         <div class="patient-info">
-            <h3>👤 Informations Patient</h3>
+            <h3> Informations Patient</h3>
             <p><strong>Nom:</strong> ${patient.nom} ${patient.prenom}</p>
             <p><strong>ID:</strong> #${patient.id}</p>
             <p><strong>Date de naissance:</strong>
@@ -43,11 +51,11 @@
             <h3> Consultation Initiale (Généraliste)</h3>
             <c:if test="${not empty consultation.observations}">
                 <p><strong>Observations:</strong></p>
-                <p style="white-space: pre-line; background: #f5f5f5; padding: 10px; border-radius: 4px;">${consultation.observations}</p>
+                <p style="white-space: pre-line; background: var(--light-gray); padding: 10px; border-radius: 4px;">${consultation.observations}</p>
             </c:if>
             <c:if test="${not empty consultation.diagnostic}">
                 <p><strong>Diagnostic préliminaire:</strong></p>
-                <p style="white-space: pre-line; background: #f5f5f5; padding: 10px; border-radius: 4px;">${consultation.diagnostic}</p>
+                <p style="white-space: pre-line; background: var(--light-gray); padding: 10px; border-radius: 4px;">${consultation.diagnostic}</p>
             </c:if>
         </div>
 
@@ -82,7 +90,7 @@
                         <c:forEach var="acte" items="${actes}">
                             <div class="acte-item" onclick="toggleActe(this)" data-id="${acte.id}">
                                 <strong>${acte.libelle}</strong><br>
-                                <span style="color: #0e5997;">${acte.tarif} €</span><br>
+                                <span style="color: var(--success-green);">${acte.tarif} €</span><br>
                                 <small>${acte.categorie}</small>
                             </div>
                         </c:forEach>
@@ -93,9 +101,9 @@
 
             <div style="text-align: center; margin-top: 30px;">
                 <button type="submit" class="btn" onclick="return confirm('Confirmer la fin de l\'expertise ?')">
-                     Terminer l'Expertise
+                 Terminer l'Expertise
                 </button>
-                <a href="${pageContext.request.contextPath}/app/specialiste/dashboard" class="btn" style="background: #757575;">
+                <a href="${pageContext.request.contextPath}/app/specialiste/dashboard" class="btn" style="background: var(--neutral-gray);">
                      Retour au Dashboard
                 </a>
             </div>

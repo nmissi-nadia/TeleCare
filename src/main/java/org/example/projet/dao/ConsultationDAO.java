@@ -55,19 +55,7 @@ public class ConsultationDAO {
         }
     }
 
-    public List<Consultation> findByMedecinAndStatut(User medecin, String statut) {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            return em.createQuery(
-                "SELECT c FROM Consultation c WHERE c.medecin = :medecin AND c.statut = :statut ORDER BY c.dateConsultation DESC",
-                Consultation.class)
-                .setParameter("medecin", medecin)
-                .setParameter("statut", statut)
-                .getResultList();
-        } finally {
-            em.close();
-        }
-    }
+
 
     public List<Consultation> findByPatient(Patient patient) {
         EntityManager em = JPAUtil.getEntityManager();
@@ -81,4 +69,17 @@ public class ConsultationDAO {
             em.close();
         }
     }
+    public List<Consultation> findByMedecinAndStatut(User medecin, String statut) {
+    EntityManager em = JPAUtil.getEntityManager();
+    try {
+        return em.createQuery(
+            "SELECT c FROM Consultation c WHERE c.medecin = :medecin AND c.statut = :statut ORDER BY c.dateConsultation DESC",
+            Consultation.class)
+            .setParameter("medecin", medecin)
+            .setParameter("statut", statut)
+            .getResultList();
+    } finally {
+        em.close();
+    }
+}
 }

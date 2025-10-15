@@ -29,6 +29,9 @@ public class DemandeExpertise {
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
 
+    @Column
+    private String raisonRefus;
+
     @ManyToOne
     @JoinColumn(name = "medecin_generaliste_id")
     private MedecinGeneraliste medecinGeneraliste;
@@ -70,4 +73,7 @@ public class DemandeExpertise {
 
     public MedecinSpecialiste getMedecinSpecialiste() { return medecinSpecialiste; }
     public void setMedecinSpecialiste(MedecinSpecialiste medecinSpecialiste) { this.medecinSpecialiste = medecinSpecialiste; }
+
+    public String getRaisonRefus() { return raisonRefus; }
+    public void setRaisonRefus(String raisonRefus) { this.raisonRefus = raisonRefus; }
 }

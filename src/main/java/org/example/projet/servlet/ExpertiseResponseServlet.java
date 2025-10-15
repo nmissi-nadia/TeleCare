@@ -58,13 +58,16 @@ public class ExpertiseResponseServlet extends HttpServlet {
 
     private void accepterExpertise(DemandeExpertise demande, User specialiste, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            // Récupérer les données de la consultation originale
+            Consultation consultationOriginale = demande.getConsultation();
+            
             // Créer une nouvelle consultation d'expertise
             Consultation consultation = new Consultation();
-            consultation.setPatient(demande.getConsultation().getPatient());
+            consultation.setPatient(consultationOriginale.getPatient());
             consultation.setMedecin(specialiste);
-            consultation.setObservations(demande.getObservations());
-            consultation.setDiagnostic(demande.getDiagnostic());
-            consultation.setTraitement(demande.getTraitement());
+            consultation.setObservations(consultationOriginale.getObservations());
+            consultation.setDiagnostic(consultationOriginale.getDiagnostic());
+            consultation.setTraitement(consultationOriginale.getTraitement());
             consultation.setStatut("EN_COURS_EXPERTISE");
             consultation.setDateConsultation(LocalDateTime.now());
 
@@ -72,7 +75,7 @@ public class ExpertiseResponseServlet extends HttpServlet {
             demande.setConsultation(consultation);
             demande.setStatut("ACCEPTEE");
             demande.setDateReponse(LocalDateTime.now());
-            demande.setSpecialiste((MedecinSpecialiste) specialiste);
+            demande.setMedecinSpecialiste((MedecinSpecialiste) specialiste);
 
             consultationDAO.ajouter(consultation);
             demandeDAO.update(demande);
@@ -91,7 +94,7 @@ public class ExpertiseResponseServlet extends HttpServlet {
             demande.setStatut("REFUSEE");
             demande.setDateReponse(LocalDateTime.now());
             demande.setRaisonRefus("Refusée par le spécialiste");
-            demande.setSpecialiste((MedecinSpecialiste) specialiste);
+            demande.setMedecinSpecialiste((MedecinSpecialiste) specialiste);
 
             demandeDAO.update(demande);
 
