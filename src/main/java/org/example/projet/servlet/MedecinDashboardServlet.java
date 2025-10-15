@@ -24,10 +24,12 @@ public class MedecinDashboardServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!("MEDECIN_GENERALISTE".equals(currentUser.getRole()) || "MEDECIN_SPECIALISTE".equals(currentUser.getRole()))) {
+        if (!("GENERALISTE".equals(currentUser.getRole()) || "SPECIALISTE".equals(currentUser.getRole()))) {
             resp.sendError(403, "Accès refusé - Réservé aux médecins");
             return;
         }
+        // patients urgents
+        List<Patient> urgentPatients = patientDAO.listerPatientsUrgents();
 //patients en attente
         List<Patient> patientsEnAttente = patientDAO.listerPatientsEnAttente();
 
@@ -40,7 +42,7 @@ public class MedecinDashboardServlet extends HttpServlet {
         long consultationsTerminees = consultationsDuJour.stream()
             .filter(c -> "TERMINE".equals(c.getStatut()))
             .count();
-
+        req.setAttribute("urgentPatients",urgentPatients);
         req.setAttribute("patientsEnAttente", patientsEnAttente);
         req.setAttribute("consultationsDuJour", consultationsDuJour);
         req.setAttribute("stats", new int[]{(int)consultationsAujourdhui, (int)patientsEnAttenteCount, (int)consultationsTerminees});

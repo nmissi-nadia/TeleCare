@@ -295,7 +295,39 @@
         </form>
     </c:otherwise>
 </c:choose>
-
+ <!-- partie hidden lorsqu on clique sur button demande expertise il affiche pour faire une recherche sur les specialistes existe par specialite -->
+        <div class="data-table">
+            <h3 style="padding: 20px 20px 0; margin: 0;">Demandes d'expertise</h3>
+            <c:choose>
+                <c:when test="${empty demandesExpertise}">
+                    <p style="text-align: center; color: var(--neutral-gray); padding: 40px;">Aucune demande d'expertise</p>
+                </c:when>
+                <c:otherwise>
+                    <table>
+                        <thead><tr><th>ID</th><th>Patient</th><th>Heure Consultation</th><th>Statut</th></tr></thead>
+                        <tbody>
+                            <c:forEach var="d" items="${demandesExpertise}">
+                                <tr>
+                                    <td>#${d.id}</td>
+                                    <td><strong>${d.patient.nom} ${d.patient.prenom}</strong></td>
+                                    <td>
+                                        <%
+                                            org.example.projet.model.DemandeExpertise demande = (org.example.projet.model.DemandeExpertise) pageContext.getAttribute("d");
+                                            if (demande != null && demande.getConsultation() != null && demande.getConsultation().getDateConsultation() != null) {
+                                                out.print(demande.getConsultation().getDateConsultation().format(timeFormatter));
+                                            } else {
+                                                out.print("-");
+                                            }
+                                        %>
+                                    </td>
+                                    <td><span class="status-badge status-${d.statut.toLowerCase().replace('_', '-')}">${d.statut}</span></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:otherwise>
+            </c:choose>
+        </div>
 <script>
     let selectedActes = [];
     let total = 0;
@@ -328,6 +360,11 @@
             this.appendChild(input);
         });
     });
+        //script pour affiché la partie hidden lorsqu on clique sur button demande expertise
+        document.getElementById("demandesExpertise").style.display = "none";
+        document.getElementById("demandesExpertise").style.display = "block";
+        
+    
 </script>
 </body>
 </html>

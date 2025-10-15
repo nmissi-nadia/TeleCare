@@ -37,7 +37,7 @@ public class PatientServlet extends jakarta.servlet.http.HttpServlet {
                 LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
                 p.setDateNaissance(dateNaissance);
             } catch (Exception e) {
-                // Log error or handle invalid date format
+                p.setDateNaissance(null);
             }
         }
 
@@ -69,7 +69,7 @@ public class PatientServlet extends jakarta.servlet.http.HttpServlet {
                 p.setFrequenceRespiratoire(Integer.parseInt(frequenceRespiratoireStr));
             }
         } catch (NumberFormatException e) {
-            // Log error or handle invalid number format
+            p.setFrequenceRespiratoire(null);
         }
 
         // Traitement de l'heure d'arrivée

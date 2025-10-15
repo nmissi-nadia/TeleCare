@@ -103,10 +103,10 @@ public class RegisterServlet extends HttpServlet {
             case "INFIRMIER":
                 user = new Infirmier();
                 break;
-            case "MEDECIN_GENERALISTE":
+            case "GENERALISTE":
                 user = new MedecinGeneraliste();
                 break;
-            case "MEDECIN_SPECIALISTE":
+            case "SPECIALISTE":
                 user = new MedecinSpecialiste();
                 break;
             default:
@@ -134,7 +134,7 @@ public class RegisterServlet extends HttpServlet {
 
     private boolean isValidRole(String role) {
         return role.equals("INFIRMIER") ||
-               role.equals("MEDECIN_GENERALISTE") ||
-               role.equals("MEDECIN_SPECIALISTE");
+               role.equals("GENERALISTE") ||
+               role.equals("SPECIALISTE");
     }
 }

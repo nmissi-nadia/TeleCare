@@ -12,10 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary-blue: #2196F3;
+            --primary-blue: #4CAF50;
             --primary-green: #4CAF50;
-            --primary-purple: #9C27B0;
-            --accent-orange: #FF9800;
+            --primary-purple: #4CAF50;
+            --accent-orange: #4CAF50;
             --neutral-gray: #757575;
             --light-gray: #F5F5F5;
             --white: #FFFFFF;
@@ -110,6 +110,34 @@
             <a href="${pageContext.request.contextPath}/app/patient" class="btn btn-primary">Voir Patients</a>
             <a href="${pageContext.request.contextPath}/jsp/home.jsp" class="btn btn-secondary">Accueil</a>
         </div>
+        <!-- partie pour les patients urgents -->
+
+        <div class="data-table">
+            <h3 style="padding: 20px 20px 0; margin: 0;">Patients Urgents</h3>
+            <c:choose>
+                <c:when test="${empty urgentPatients}">
+                    <p style="text-align: center; color: var(--neutral-gray); padding: 40px;">Aucun patient urgent</p>
+                </c:when>
+                <c:otherwise>
+                    <table>
+                        <thead><tr><th>ID</th><th>Patient</th><th>Heure Arrivée</th><th>Statut</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <c:forEach var="p" items="${urgentPatients}">
+                                <tr>
+                                    <td>#${p.id}</td>
+                                    <td><strong>${p.prenom} ${p.nom}</strong></td>
+                                    <td>${p.heureArrivee}</td>
+                                    <td><span class="status-badge status-urgent">${p.statut}</span></td>
+                                    <td><a href="${pageContext.request.contextPath}/consultation?patientId=${p.id}" class="btn btn-primary">Consulter</a></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- patients en attente -->
 
         <div class="data-table">
             <h3 style="padding: 20px 20px 0; margin: 0;">Patients en Attente</h3>
@@ -179,6 +207,9 @@
                 </c:otherwise>
             </c:choose>
         </div>
+
+       
     </main>
+    
 </body>
 </html>

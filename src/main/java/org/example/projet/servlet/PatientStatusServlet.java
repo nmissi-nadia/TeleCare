@@ -23,7 +23,7 @@ public class PatientStatusServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!"INFIRMIER".equals(currentUser.getRole()) && !"MEDECIN_GENERALISTE".equals(currentUser.getRole())) {
+        if (!"INFIRMIER".equals(currentUser.getRole()) && !"GENERALISTE".equals(currentUser.getRole())) {
             resp.sendError(403);
             return;
         }
@@ -62,7 +62,7 @@ public class PatientStatusServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!"INFIRMIER".equals(currentUser.getRole()) && !"MEDECIN_GENERALISTE".equals(currentUser.getRole())) {
+        if (!"INFIRMIER".equals(currentUser.getRole()) && !"GENERALISTE".equals(currentUser.getRole())) {
             resp.sendError(403);
             return;
         }

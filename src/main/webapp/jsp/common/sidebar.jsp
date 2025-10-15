@@ -26,7 +26,7 @@
             </c:if>
 
             <!-- Module Médecin Généraliste -->
-            <c:if test="${sessionScope.currentUser.role == 'MEDECIN_GENERALISTE'}">
+            <c:if test="${sessionScope.currentUser.role == 'GENERALISTE'}">
                 <li><a href="${pageContext.request.contextPath}/app/medecin/dashboard" class="${pageContext.request.servletPath == '/app/medecin/dashboard' ? 'active' : ''}">
                     <span class="icon">👨‍⚕️</span> Dashboard Médecin</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/patient/attente" class="">

@@ -25,6 +25,12 @@ public class DemandeExpertise {
     @Column
     private LocalDateTime dateReponse;
 
+    @Column
+    private String observations;
+
+    @Column
+    private String diagnostic;
+
     @OneToOne
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
@@ -64,6 +70,12 @@ public class DemandeExpertise {
 
     public LocalDateTime getDateReponse() { return dateReponse; }
     public void setDateReponse(LocalDateTime dateReponse) { this.dateReponse = dateReponse; }
+
+    public String getObservations() { return observations; }
+    public void setObservations(String observations) { this.observations = observations; }
+
+    public String getDiagnostic() { return diagnostic; }
+    public void setDiagnostic(String diagnostic) { this.diagnostic = diagnostic; }
 
     public Consultation getConsultation() { return consultation; }
     public void setConsultation(Consultation consultation) { this.consultation = consultation; }

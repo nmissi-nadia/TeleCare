@@ -38,10 +38,10 @@
         }
 
         h2 {
-            color: #667eea;
+            color: #059669;
             margin: 25px 0 15px 0;
             font-size: 18px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #15e40e;
             padding-bottom: 5px;
         }
 
@@ -110,7 +110,7 @@
 
         .btn {
             width: 100%;
-            background: #667eea;
+            background: #15e40e;
             color: white;
             padding: 12px;
             border: none;
@@ -121,7 +121,7 @@
         }
 
         .btn:hover {
-            background: #5a67d8;
+            background: #15e40e;
         }
 
         .back-link {
@@ -132,7 +132,7 @@
         }
 
         .back-link a {
-            color: #667eea;
+            color: #15e40e;
             text-decoration: none;
             font-size: 14px;
         }
@@ -194,12 +194,12 @@
                         <div class="role-label">Infirmier</div>
                     </div>
 
-                    <div class="role-option" onclick="selectRole('MEDECIN_GENERALISTE')">
+                    <div class="role-option" onclick="selectRole('GENERALISTE')">
                         <div class="role-icon">👨‍⚕️</div>
                         <div class="role-label">Médecin Généraliste</div>
                     </div>
 
-                    <div class="role-option" onclick="selectRole('MEDECIN_SPECIALISTE')">
+                    <div class="role-option" onclick="selectRole('SPECIALISTE')">
                         <div class="role-icon">🩺</div>
                         <div class="role-label">Médecin Spécialiste</div>
                     </div>

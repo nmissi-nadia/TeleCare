@@ -19,6 +19,16 @@ public class PatientDAO {
             if (em.isOpen()) em.close();
         }
     }
+    public void update(Patient p) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(p);
+            em.getTransaction().commit();
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
 
     public List<Patient> listerPatientsDuJour() {
         EntityManager em = JPAUtil.getEntityManager();
@@ -70,6 +80,15 @@ public class PatientDAO {
             em.getTransaction().commit();
         } finally {
             if (em.isOpen()) em.close();
+        }
+    }
+    public List<Patient> listerPatientsUrgents() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Patient p WHERE p.statut = 'URGENT' ORDER BY p.heureArrivee", Patient.class)
+                    .getResultList();
+        } finally {
+            em.close();
         }
     }
 }

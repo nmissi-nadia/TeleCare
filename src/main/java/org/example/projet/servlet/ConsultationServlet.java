@@ -44,8 +44,12 @@ public class ConsultationServlet extends HttpServlet {
                 resp.sendError(400, "Le patient n'est pas en attente de consultation");
                 return;
             }
+            //si le patient est en attente de consultation, on le met en cours
+            if ("EN_ATTENTE".equals(patient.getStatut())) {
+                patient.setStatut("EN_COURS");
+                patientDAO.update(patient);
+            }
 
-            // Récupérer tous les actes disponibles pour le formulaire
             List<Acte> actes = acteDAO.listerTous();
             req.setAttribute("actes", actes);
 
@@ -65,7 +69,7 @@ public class ConsultationServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!"MEDECIN_GENERALISTE".equals(currentUser.getRole()) && !"MEDECIN_SPECIALISTE".equals(currentUser.getRole())) {
+        if (!"GENERALISTE".equals(currentUser.getRole()) && !"SPECIALISTE".equals(currentUser.getRole())) {
             resp.sendError(403, "Accès refusé");
             return;
         }
@@ -139,8 +143,8 @@ public class ConsultationServlet extends HttpServlet {
                     demande.setRaison(raison);
                     demande.setSpecialiteDemandee(specialite);
                     demande.setStatut("EN_ATTENTE");
-                    // demande.setObservations(observations);
-                    // demande.setDiagnostic(diagnostic);
+                    demande.setObservations(observations);
+                    demande.setDiagnostic(diagnostic);
 
                     // demandeExpertiseDAO.ajouter(demande);
 

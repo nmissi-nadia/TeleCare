@@ -376,17 +376,19 @@
             <a href="/consultation_form">Consultation</a>
             <a href="/patient_list">Patients</a>
             <a href="#contact">Contact</a>
-            <% if (session.getAttribute("user") != null) { 
-                String role = (String) session.getAttribute("role");
-                String dashboardUrl = "/medecin_dashboard"; // Default for medecin
-                if ("infirmier".equals(role)) {
-                    dashboardUrl = "/infirmier_dashboard";
+            <% if (session.getAttribute("currentUser") != null) { 
+                String role = (String) ((org.example.projet.model.User) session.getAttribute("currentUser")).getRole();
+                String dashboardUrl = "medecin_dashboard.jsp"; 
+                if ("INFIRMIER".equals(role)) {
+                    dashboardUrl = "infirmier_dashboard.jsp";
+                } else if ("SPECIALISTE".equals(role)) {
+                    dashboardUrl = "specialiste_dashboard.jsp";
                 }
             %>
-                <a href="projet_war_exploded/jsp/<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
+                <a href="jsp/<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
             <% } else { %>
-                <a href="projet_war_exploded/jsp/login" class="btn btn-primary">Connexion</a>
-                <a href="projet_war_exploded/jsp/register" class="btn btn-secondary">Inscription</a>
+                <a href="/app/login" class="btn btn-primary">Connexion</a>  
+                <a href="/jsp/register.jsp" class="btn btn-secondary">Inscription</a>
             <% } %>
         </nav>
     </div>
