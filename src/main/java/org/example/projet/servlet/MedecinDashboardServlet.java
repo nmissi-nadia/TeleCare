@@ -30,7 +30,7 @@ public class MedecinDashboardServlet extends HttpServlet {
         }
         // patients urgents
         List<Patient> urgentPatients = patientDAO.listerPatientsUrgents();
-//patients en attente
+        //patients en attente
         List<Patient> patientsEnAttente = patientDAO.listerPatientsEnAttente();
 
         // consultaion par jour

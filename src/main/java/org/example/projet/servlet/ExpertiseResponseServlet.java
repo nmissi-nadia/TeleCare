@@ -21,7 +21,7 @@ public class ExpertiseResponseServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!"MEDECIN_SPECIALISTE".equals(currentUser.getRole())) {
+        if (!"SPECIALISTE".equals(currentUser.getRole())) {
             resp.sendError(403, "Accès refusé - Réservé aux médecins spécialistes");
             return;
         }

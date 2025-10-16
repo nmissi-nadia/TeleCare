@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary-blue: #2196F3;
+            --primary-blue: #4CAF50;
             --primary-green: #4CAF50;
-            --primary-purple: #9C27B0;
+            --primary-purple: #15e40e;
             --accent-orange: #FF9800;
             --neutral-gray: #757575;
             --light-gray: #F5F5F5;
@@ -71,7 +71,7 @@
 </head>
 <body>
     <div class="container">
-        <header class="page-header">
+        <header class="page-header ">
             <h1>Formulaire Patient</h1>
             <p class="subtitle">Enregistrement d'un nouveau patient dans le systeme TeleCare</p>
         </header>
@@ -147,8 +147,6 @@
                         <select id="statut" name="statut" class="form-control form-select" required>
                             <option value="">Selectionner un statut</option>
                             <option value="EN_ATTENTE">En Attente</option>
-                            <option value="EN_COURS">En Cours</option>
-                            <option value="TERMINE">Termine</option>
                             <option value="URGENT">Urgent</option>
                         </select>
                     </div>

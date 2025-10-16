@@ -378,11 +378,13 @@
             <a href="#contact">Contact</a>
             <% if (session.getAttribute("currentUser") != null) { 
                 String role = (String) ((org.example.projet.model.User) session.getAttribute("currentUser")).getRole();
-                String dashboardUrl = "medecin_dashboard.jsp"; 
+                String dashboardUrl = "";
                 if ("INFIRMIER".equals(role)) {
                     dashboardUrl = "infirmier_dashboard.jsp";
                 } else if ("SPECIALISTE".equals(role)) {
                     dashboardUrl = "specialiste_dashboard.jsp";
+                } else if ("GENERALISTE".equals(role)) {
+                    dashboardUrl = "medecin_dashboard.jsp";
                 }
             %>
                 <a href="jsp/<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>

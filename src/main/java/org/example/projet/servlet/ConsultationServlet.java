@@ -23,6 +23,7 @@ public class ConsultationServlet extends HttpServlet {
     private ActeDAO acteDAO = new ActeDAO();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
         String patientIdParam = req.getParameter("patientId");
 
         if (patientIdParam == null) {
@@ -40,12 +41,12 @@ public class ConsultationServlet extends HttpServlet {
             }
 
             // Vérifier que le statut du patient permet une consultation
-            if (!"EN_ATTENTE".equals(patient.getStatut()) && !"EN_COURS".equals(patient.getStatut())) {
+            if (!"EN_ATTENTE".equals(patient.getStatut()) && !"EN_COURS".equals(patient.getStatut()) && !"URGENT".equals(patient.getStatut()) && !"EN_ATTENTE_EXPERTISE".equals(patient.getStatut())) {
                 resp.sendError(400, "Le patient n'est pas en attente de consultation");
                 return;
             }
             //si le patient est en attente de consultation, on le met en cours
-            if ("EN_ATTENTE".equals(patient.getStatut())) {
+            if ("EN_ATTENTE".equals(patient.getStatut()) || "URGENT".equals(patient.getStatut())) {
                 patient.setStatut("EN_COURS");
                 patientDAO.update(patient);
             }
@@ -109,7 +110,7 @@ public class ConsultationServlet extends HttpServlet {
                     if (observations == null || diagnostic == null || traitement == null) {
                         req.setAttribute("error", "Tous les champs sont obligatoires pour une consultation directe");
                         doGet(req, resp);
-                        return;
+                        return ;
                     }
                     consultation.setObservations(observations);
                     consultation.setDiagnostic(diagnostic);
@@ -196,4 +197,4 @@ public class ConsultationServlet extends HttpServlet {
             doGet(req, resp);
         }
     }
-}
+}   

@@ -128,7 +128,7 @@
                                     <td><strong>${p.prenom} ${p.nom}</strong></td>
                                     <td>${p.heureArrivee}</td>
                                     <td><span class="status-badge status-urgent">${p.statut}</span></td>
-                                    <td><a href="${pageContext.request.contextPath}/consultation?patientId=${p.id}" class="btn btn-primary">Consulter</a></td>
+                                    <td><a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-primary">Consulter</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>

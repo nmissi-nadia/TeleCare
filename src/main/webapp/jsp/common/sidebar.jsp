@@ -40,7 +40,7 @@
             </c:if>
 
             <!-- Module Médecin Spécialiste (si ajouté plus tard) -->
-            <c:if test="${sessionScope.currentUser.role == 'MEDECIN_SPECIALISTE'}">
+            <c:if test="${sessionScope.currentUser.role == 'SPECIALISTE'}">
                 <li><a href="${pageContext.request.contextPath}/app/medecin/specialiste/dashboard">
                     <span class="icon">🔬</span> Dashboard Spécialiste</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/expertises">

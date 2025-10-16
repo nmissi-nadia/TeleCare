@@ -21,20 +21,17 @@ public class SpecialisteDashboardServlet extends HttpServlet {
         }
 
         User currentUser = (User) session.getAttribute("currentUser");
-        if (!"MEDECIN_SPECIALISTE".equals(currentUser.getRole())) {
+        if (!"SPECIALISTE".equals(currentUser.getRole())) {
             resp.sendError(403, "Accès refusé - Réservé aux médecins spécialistes");
             return;
         }
 
         try {
-            // Récupérer les demandes d'expertise en attente pour cette spécialité
             String specialite = getSpecialiteFromUser(currentUser);
             List<DemandeExpertise> demandesEnAttente = demandeDAO.findBySpecialite(specialite);
 
-            // Récupérer les consultations d'expertise en cours pour ce spécialiste
             List<Consultation> consultationsEnCours = consultationDAO.findByMedecinAndStatut(currentUser, "EN_COURS_EXPERTISE");
 
-            // Récupérer les expertises terminées
             List<Consultation> expertisesTerminees = consultationDAO.findByMedecinAndStatut(currentUser, "TERMINE_EXPERTISE");
 
             req.setAttribute("demandesEnAttente", demandesEnAttente);
@@ -46,7 +43,7 @@ public class SpecialisteDashboardServlet extends HttpServlet {
 
         } catch (Exception e) {
             req.setAttribute("error", "Erreur lors du chargement du dashboard: " + e.getMessage());
-            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/home.jsp").forward(req, resp);
         }
     }
 
