@@ -13,58 +13,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary-blue: #2196F3;
             --primary-green: #4CAF50;
-            --primary-purple: #9C27B0;
-            --accent-orange: #FF9800;
-            --neutral-gray: #757575;
-            --light-gray: #F5F5F5;
+            --dark-green: #388E3C;
+            --soft-beige: #F7F3EE;
+            --light-beige: #FAF9F7;
             --white: #FFFFFF;
-            --dark-gray: #424242;
+            --text-gray: #3E3E3E;
+            --neutral-gray: #A0A0A0;
+            --accent-beige: #E9E4DA;
+            --accent-cream: #F3EED9;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--light-gray); color: var(--dark-gray); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light-beige); color: var(--text-gray); }
 
+        /* 🌿 Sidebar */
         .layout { display: flex; min-height: 100vh; }
         .sidebar {
-            width: 280px; background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
-            color: var(--white); position: fixed; height: 100vh; box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            width: 280px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            color: var(--white);
+            position: fixed; height: 100vh;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.1);
         }
-        .sidebar-header { padding: 25px 20px; text-align: center; }
-        .sidebar-nav a { display: flex; align-items: center; padding: 15px 25px; color: var(--white); text-decoration: none; }
-        .sidebar-nav a:hover { background: rgba(255,255,255,0.1); }
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        .sidebar-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .sidebar-nav a {
+            display: flex; align-items: center;
+            padding: 15px 25px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent-cream);
+        }
 
-        .main-content { flex: 1; margin-left: 280px; padding: 30px; }
-        .content-header { background: var(--white); padding: 25px; border-radius: 12px; margin-bottom: 30px; }
+        /* 🩺 Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            background: var(--soft-beige);
+            min-height: 100vh;
+        }
 
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; }
-        .btn-primary { background: var(--primary-blue); color: var(--white); }
+        .content-header {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
         .btn-success { background: var(--primary-green); color: var(--white); }
-        .btn-danger { background: #F44336; color: var(--white); }
+        .btn-primary { background: var(--accent-beige); color: var(--text-gray); }
+        .btn-danger { background: #C62828; color: var(--white); }
         .btn-secondary { background: var(--neutral-gray); color: var(--white); }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        .data-table { background: var(--white); border-radius: 12px; overflow: hidden; }
-        .data-table table { width: 100%; border-collapse: collapse; }
-        .data-table th { background: var(--light-gray); padding: 18px 15px; text-align: left; font-weight: 600; }
-        .data-table td { padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        /* 🧾 Table */
+        .data-table {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: var(--accent-cream);
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--accent-beige);
+            background: var(--white);
+        }
 
-        .status { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-EN_ATTENTE { background: var(--accent-orange); color: var(--white); }
-        .status-EN_COURS { background: var(--primary-blue); color: var(--white); }
+        /* 🩸 Statuts */
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-EN_ATTENTE { background: var(--accent-cream); color: var(--dark-green); }
+        .status-EN_COURS { background: var(--accent-beige); color: var(--dark-green); }
         .status-TERMINE { background: var(--primary-green); color: var(--white); }
-        .status-URGENT { background: #F44336; color: var(--white); }
+        .status-URGENT { background: #C62828; color: var(--white); }
 
         .patient-info { margin-bottom: 5px; }
         .vital-signs { font-size: 12px; color: var(--neutral-gray); margin-top: 2px; }
-        .no-patients { text-align: center; color: var(--neutral-gray); padding: 40px; }
 
+        /* 📱 Responsive */
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .main-content { margin-left: 0; }
         }
     </style>
 </head>
+
 <body>
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -82,7 +159,7 @@
 
     <main class="main-content">
         <div class="content-header">
-            <h2>Liste des Patients du Jour</h2>
+            <h2 style="color: var(--dark-green);">Liste des Patients du Jour</h2>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; gap: 10px;">
                     <a href="${pageContext.request.contextPath}/jsp/patient_form.jsp" class="btn btn-success">➕ Nouveau Patient</a>
@@ -96,7 +173,7 @@
 
         <c:choose>
             <c:when test="${empty patients}">
-                <div style="background: var(--white); padding: 60px; border-radius: 12px; text-align: center;">
+                <div style="background: var(--white); padding: 60px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
                     <h3 style="color: var(--neutral-gray); margin-bottom: 20px;">Aucun patient enregistré aujourd'hui</h3>
                     <p style="margin-bottom: 30px;">Commencez par ajouter un nouveau patient.</p>
                     <a href="${pageContext.request.contextPath}/jsp/patient_form.jsp" class="btn btn-success">➕ Ajouter le premier patient</a>
@@ -120,37 +197,22 @@
                         <c:forEach var="p" items="${patients}">
                             <tr>
                                 <td><strong>#${p.id}</strong></td>
-
                                 <td>
-                                    <div class="patient-info">
-                                        <strong>${p.nom} ${p.prenom}</strong>
-                                    </div>
-                                    <div class="patient-info">
-                                        <small>📅 Né(e) le :
-                                            <c:if test="${not empty p.dateNaissance}">
-                                                <%= ((java.time.LocalDate) ((org.example.projet.model.Patient) pageContext.findAttribute("p")).getDateNaissance()).format(dateFormatter) %>
-                                            </c:if>
-                                        </small>
-                                    </div>
-                                    <div class="patient-info">
-                                        <small>🏥 N° Sécu: ${p.numSecuriteSociale}</small>
-                                    </div>
+                                    <div class="patient-info"><strong>${p.nom} ${p.prenom}</strong></div>
+                                    <div class="patient-info"><small>📅 Né(e) le : 
+                                        <c:if test="${not empty p.dateNaissance}">
+                                            <%= ((java.time.LocalDate) ((org.example.projet.model.Patient) pageContext.findAttribute("p")).getDateNaissance()).format(dateFormatter) %>
+                                        </c:if>
+                                    </small></div>
+                                    <div class="patient-info"><small>🏥 N° Sécu: ${p.numSecuriteSociale}</small></div>
                                 </td>
 
                                 <td>
                                     <div class="vital-signs">
-                                        <c:if test="${not empty p.tension}">
-                                            <span>🩺 Tension: ${p.tension}</span><br>
-                                        </c:if>
-                                        <c:if test="${not empty p.frequenceCardiaque}">
-                                            <span>❤️ Fréquence: ${p.frequenceCardiaque} bpm</span><br>
-                                        </c:if>
-                                        <c:if test="${not empty p.temperature}">
-                                            <span>🌡️ Température: ${p.temperature}°C</span><br>
-                                        </c:if>
-                                        <c:if test="${not empty p.frequenceRespiratoire}">
-                                            <span>🫁 Respiration: ${p.frequenceRespiratoire}/min</span>
-                                        </c:if>
+                                        <c:if test="${not empty p.tension}">🩺 Tension: ${p.tension}<br></c:if>
+                                        <c:if test="${not empty p.frequenceCardiaque}">❤️ Fréquence: ${p.frequenceCardiaque} bpm<br></c:if>
+                                        <c:if test="${not empty p.temperature}">🌡️ Température: ${p.temperature}°C<br></c:if>
+                                        <c:if test="${not empty p.frequenceRespiratoire}">🫁 Respiration: ${p.frequenceRespiratoire}/min</c:if>
                                     </div>
                                 </td>
 
@@ -177,14 +239,10 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${p.statut == 'EN_ATTENTE'}">
-                                            <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-success">
-                                                🚀 Commencer
-                                            </a>
+                                            <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-success">🚀 Commencer</a>
                                         </c:when>
                                         <c:when test="${p.statut == 'EN_COURS'}">
-                                            <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-primary">
-                                                ⏳ Continuer
-                                            </a>
+                                            <a href="${pageContext.request.contextPath}/app/consultation?patientId=${p.id}" class="btn btn-primary">⏳ Continuer</a>
                                         </c:when>
                                         <c:otherwise>
                                             <span style="color: var(--neutral-gray);">✅ Terminée</span>

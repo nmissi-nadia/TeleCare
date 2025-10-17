@@ -21,70 +21,41 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--light-gray); color: var(--dark-gray); line-height: 1.6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light-gray); color: var(--dark-gray); }
 
         .consultation-header {
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            color: white;
-            text-align: center;
-            padding: 35px 20px;
-            border-radius: 0 0 20px 20px;
-            margin-bottom: 30px;
+            color: white; text-align: center;
+            padding: 35px 20px; border-radius: 0 0 20px 20px; margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .consultation-header h2 { margin-bottom: 10px; }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
         .card {
             background: var(--white);
-            padding: 25px;
-            border-radius: 12px;
+            padding: 25px; border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .card h3 {
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-        }
+        h3 { color: var(--primary-blue); margin-bottom: 20px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; }
+        .info-box { background: #f8f9fa; border-radius: 8px; padding: 15px; }
+        .info-box strong { color: var(--primary-blue); display: block; margin-bottom: 4px; }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
+        .form-group { margin-bottom: 20px; }
+        .form-group label { font-weight: 600; display: block; margin-bottom: 8px; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;
         }
 
         textarea { resize: vertical; }
 
         .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
+            padding: 12px 20px; border: none; border-radius: 8px;
+            cursor: pointer; font-weight: 600; transition: 0.3s;
             color: #fff;
         }
-
         .btn-primary { background: var(--primary-blue); }
         .btn-success { background: var(--primary-green); }
         .btn-warning { background: var(--accent-orange); }
@@ -92,26 +63,7 @@
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-
-        .acte-item {
-            background: #f8f9fa;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-        }
-
-        .acte-item input { margin-right: 8px; }
-
-        .expertise-section {
-            display: none;
-            background: #fafafa;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed #ccc;
-            margin-top: 15px;
-        }
-
-        .visible { display: block !important; }
+        .acte-item { background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
     </style>
 </head>
 
@@ -133,30 +85,39 @@
             </c:when>
 
             <c:otherwise>
-                <!-- Infos Patient -->
+                <!-- 🩺 Infos Patient Complètes -->
                 <div class="card">
                     <h3>Informations du Patient</h3>
-                    <p><strong>Nom :</strong> ${patient.nom} ${patient.prenom}</p>
-                    <p><strong>Heure d'arrivée :</strong>
-                        <%
-                            org.example.projet.model.Patient pat = (org.example.projet.model.Patient) pageContext.findAttribute("patient");
-                            if (pat.getHeureArrivee() != null) {
-                                out.print(pat.getHeureArrivee().format(dateFormatter));
-                            } else {
-                                out.print("Non définie");
-                            }
-                        %>
-                    </p>
-                    <p><strong>Statut :</strong> ${patient.statut}</p>
+                    <div class="info-grid">
+                        <div class="info-box"><strong>Nom</strong>${patient.nom}</div>
+                        <div class="info-box"><strong>Prénom</strong>${patient.prenom}</div>
+                        <div class="info-box"><strong>Date de naissance</strong>${patient.dateNaissance}</div>
+                        <div class="info-box"><strong>Numéro Sécurité Sociale</strong>${patient.numSecuriteSociale}</div>
+                        <div class="info-box"><strong>Heure d'arrivée</strong>
+                            <%
+                                org.example.projet.model.Patient pat = (org.example.projet.model.Patient) pageContext.findAttribute("patient");
+                                if (pat.getHeureArrivee() != null) {
+                                    out.print(pat.getHeureArrivee().format(dateFormatter));
+                                } else {
+                                    out.print("Non définie");
+                                }
+                            %>
+                        </div>
+                        <div class="info-box"><strong>Statut</strong>${patient.statut}</div>
+                        <div class="info-box"><strong>Tension</strong>${patient.tension} mmHg</div>
+                        <div class="info-box"><strong>Température</strong>${patient.temperature} °C</div>
+                        <div class="info-box"><strong>Fréquence Cardiaque</strong>${patient.frequenceCardiaque} bpm</div>
+                        <div class="info-box"><strong>Fréquence Respiratoire</strong>${patient.frequenceRespiratoire} /min</div>
+                    </div>
                 </div>
 
-                <!-- Formulaire Consultation -->
+                <!-- 🧾 Formulaire Consultation -->
                 <form action="${pageContext.request.contextPath}/app/consultation" method="post" class="card">
                     <input type="hidden" name="patientId" value="${patient.id}">
 
                     <div class="form-group">
                         <label for="type">Type de Consultation :</label>
-                        <select name="type" id="type" onchange="toggleExpertiseSection()" required>
+                        <select name="type" id="type" onchange="handleConsultationType()" required>
                             <option value="DIRECTE">Consultation Directe</option>
                             <option value="EXPERTISE">Demande d’Expertise</option>
                             <option value="ANNULATION">Annulation</option>
@@ -198,25 +159,7 @@
                         </c:choose>
                     </div>
 
-                    <!-- Section Demande d'Expertise -->
-                    <div id="expertiseSection" class="expertise-section">
-                        <div class="form-group">
-                            <label for="raison">Raison de la Demande :</label>
-                            <textarea name="raison" id="raison" placeholder="Motif de la demande d’expertise..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="specialite">Spécialité Demandée :</label>
-                            <select name="specialite" id="specialite">
-                                <option value="">-- Sélectionner --</option>
-                                <option value="CARDIOLOGIE">Cardiologie</option>
-                                <option value="DERMATOLOGIE">Dermatologie</option>
-                                <option value="NEUROLOGIE">Neurologie</option>
-                                <option value="PEDIATRIE">Pédiatrie</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group btn-group">
+                    <div class="btn-group">
                         <button type="submit" class="btn btn-success">💾 Enregistrer</button>
                         <a href="${pageContext.request.contextPath}/app/medecin/dashboard" class="btn btn-secondary">⬅ Retour</a>
                     </div>
@@ -226,20 +169,13 @@
     </div>
 
     <script>
-        function toggleExpertiseSection() {
+        // 🧠 Gérer la redirection automatique vers la page d’expertise
+        function handleConsultationType() {
             const type = document.getElementById("type").value;
-            const expertise = document.getElementById("expertiseSection");
-            const traitementField = document.getElementById("traitementField");
-
+            const patientId = "${patient.id}";
             if (type === "EXPERTISE") {
-                expertise.classList.add("visible");
-                traitementField.style.display = "none";
-            } else if (type === "ANNULATION") {
-                expertise.classList.remove("visible");
-                traitementField.style.display = "none";
-            } else {
-                expertise.classList.remove("visible");
-                traitementField.style.display = "block";
+                // Redirige automatiquement vers la page de création de demande d'expertise
+                window.location.href = "${pageContext.request.contextPath}/app/consultation/expertise?patientId=" + patientId;
             }
         }
     </script>

@@ -1,143 +1,209 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<html>
+<html lang="fr">
 <head>
-    <title>Consultation d'Expertise - TeleCare</title>
+    <meta charset="UTF-8">
+    <title>Demande de Télé-Expertise - TeleCare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --success-green: #4CAF50;     
-            --neutral-gray: #059669;      
-            --light-gray: #F5F5F5;        
-            --white: #FFFFFF;             
-            --dark-gray: #424242;         
+            --primary-green: #4CAF50;
+            --light-beige: #f5f3e7;
+            --white: #ffffff;
+            --neutral-gray: #757575;
+            --dark-gray: #2e2e2e;
         }
 
-        body { font-family: Arial, sans-serif; margin: 20px; background: var(--light-gray); }
-        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 8px; }
-        .header { background: var(--neutral-gray); color: white; padding: 20px; border-radius: 8px 8px 0 0; margin: -25px -25px 25px -25px; }
-        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        .form-group { margin: 10px 0; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        textarea { height: 100px; }
-        .btn { padding: 10px 15px; background: var(--success-green); color: white; border: none; margin: 5px; border-radius: 4px; }
-        .patient-info { background: var(--light-gray); padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-        .actes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin: 15px 0; }
-        .acte-item { padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
-        .acte-item:hover { background: var(--light-gray); }
-        .acte-item.selected { background: var(--success-green); border-color: var(--success-green); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light-beige); color: var(--dark-gray); }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, #81c784 100%);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header { padding: 25px 20px; text-align: center; }
+        .sidebar-nav a {
+            display: block; padding: 15px 25px; color: var(--white);
+            text-decoration: none; font-weight: 500;
+        }
+        .sidebar-nav a:hover { background: rgba(255,255,255,0.1); }
+
+        .main-content { flex: 1; margin-left: 280px; padding: 30px; }
+
+        .page-header {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        label { font-weight: 600; color: var(--primary-green); display: block; margin-bottom: 8px; }
+        select, textarea, input {
+            width: 100%; padding: 12px;
+            border-radius: 8px; border: 1px solid #ccc;
+            margin-bottom: 15px; font-size: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none; border-radius: 10px;
+            font-weight: 600; cursor: pointer;
+            transition: all 0.3s; font-size: 15px;
+        }
+        .btn-primary { background: var(--primary-green); color: var(--white); }
+        .btn-primary:hover { background: #43a047; transform: translateY(-2px); }
+        .btn-secondary { background: var(--neutral-gray); color: var(--white); }
+
+        .specialist-list { margin-top: 15px; }
+        .specialist-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .specialist-info h4 { margin-bottom: 5px; color: var(--primary-green); }
+        .specialist-info small { color: var(--neutral-gray); }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .slot {
+            background: #f1f8f4;
+            border: 1px solid #a5d6a7;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .slot:hover { background: var(--primary-green); color: white; }
+        .slot.selected { background: var(--primary-green); color: white; border: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2> Consultation d'Expertise Spécialisée</h2>
-            <p><strong>Spécialiste:</strong> ${currentUser.prenom} ${currentUser.nom}</p>
-        </div>
 
-        <div class="patient-info">
-            <h3> Informations Patient</h3>
-            <p><strong>Nom:</strong> ${patient.nom} ${patient.prenom}</p>
-            <p><strong>ID:</strong> #${patient.id}</p>
-            <p><strong>Date de naissance:</strong>
-                <%= ((java.time.LocalDate) ((org.example.projet.model.Patient) pageContext.findAttribute("patient")).getDateNaissance()).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) %>
-            </p>
-            <p><strong>N° Sécurité Sociale:</strong> ${patient.numSecuriteSociale}</p>
-        </div>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h1>🌿 TeleCare</h1>
+        <div style="font-size: 14px; opacity: 0.8;">Expertise</div>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="${pageContext.request.contextPath}/app/medecin/dashboard">🏠 Dashboard</a>
+        <a href="${pageContext.request.contextPath}/app/patient">👨‍⚕️ Patients</a>
+        <a href="${pageContext.request.contextPath}/logout">🚪 Déconnexion</a>
+    </nav>
+</aside>
 
-        <!-- Consultation initiale du généraliste -->
-        <div class="section">
-            <h3> Consultation Initiale (Généraliste)</h3>
-            <c:if test="${not empty consultation.observations}">
-                <p><strong>Observations:</strong></p>
-                <p style="white-space: pre-line; background: var(--light-gray); padding: 10px; border-radius: 4px;">${consultation.observations}</p>
-            </c:if>
-            <c:if test="${not empty consultation.diagnostic}">
-                <p><strong>Diagnostic préliminaire:</strong></p>
-                <p style="white-space: pre-line; background: var(--light-gray); padding: 10px; border-radius: 4px;">${consultation.diagnostic}</p>
-            </c:if>
-        </div>
+<main class="main-content">
+    <div class="page-header">
+        <h2>Demande de Télé-Expertise</h2>
+        <p style="color: var(--neutral-gray);">Recherchez un spécialiste, choisissez un créneau et envoyez votre demande.</p>
+    </div>
 
-        <!-- Formulaire d'expertise du spécialiste -->
-        <form action="${pageContext.request.contextPath}/app/consultation/expertise" method="post">
-            <input type="hidden" name="consultationId" value="${consultation.id}" />
+    <!-- Étape 1 : Recherche de spécialistes -->
+    <div class="card">
+        <h3>🔍 Rechercher un Spécialiste</h3>
+        <form method="get" action="${pageContext.request.contextPath}/app/consultation/expertise">
+            <label for="specialite">Spécialité</label>
+            <select id="specialite" name="specialite" required>
+                <option value="">-- Sélectionner --</option>
+                <option value="CARDIOLOGIE">Cardiologie</option>
+                <option value="DERMATOLOGIE">Dermatologie</option>
+                <option value="PEDIATRIE">Pédiatrie</option>
+                <option value="NEUROLOGIE">Neurologie</option>
+            </select>
 
-            <div class="section">
-                <h3>🔬 Expertise Spécialisée</h3>
+            <label for="tarifMax">Tarif maximum (DH)</label>
+            <input type="number" id="tarifMax" name="tarifMax" placeholder="ex: 300">
 
-                <div class="form-group">
-                    <label for="avis">Avis du spécialiste *:</label>
-                    <textarea id="avis" name="avis" required
-                              placeholder="Votre analyse spécialisée et conclusions..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="diagnostic">Diagnostic spécialisé *:</label>
-                    <textarea id="diagnostic" name="diagnostic" required
-                              placeholder="Diagnostic définitif après expertise..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="traitement">Traitement spécialisé *:</label>
-                    <textarea id="traitement" name="traitement" required
-                              placeholder="Prescription spécialisée et protocole de soins..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Actes médicaux spécialisés (optionnel):</label>
-                    <div class="actes-grid">
-                        <c:forEach var="acte" items="${actes}">
-                            <div class="acte-item" onclick="toggleActe(this)" data-id="${acte.id}">
-                                <strong>${acte.libelle}</strong><br>
-                                <span style="color: var(--success-green);">${acte.tarif} €</span><br>
-                                <small>${acte.categorie}</small>
-                            </div>
-                        </c:forEach>
-                    </div>
-                    <p><small>Cliquez pour sélectionner les actes réalisés pendant l'expertise</small></p>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <button type="submit" class="btn" onclick="return confirm('Confirmer la fin de l\'expertise ?')">
-                 Terminer l'Expertise
-                </button>
-                <a href="${pageContext.request.contextPath}/app/specialiste/dashboard" class="btn" style="background: var(--neutral-gray);">
-                     Retour au Dashboard
-                </a>
-            </div>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
         </form>
     </div>
 
-    <script>
-        let selectedActes = [];
+    <!-- Étape 2 : Liste des spécialistes -->
+    <c:if test="${not empty specialistes}">
+        <div class="card">
+            <h3>👨‍⚕️ Spécialistes Disponibles</h3>
+            <div class="specialist-list">
+                <c:forEach var="s" items="${specialistes}">
+                    <div class="specialist-card">
+                        <div class="specialist-info">
+                            <h4>${s.nom} ${s.prenom}</h4>
+                            <small>${s.specialite} • ${s.tarif} DH</small>
+                        </div>
+                        <form method="get" action="${pageContext.request.contextPath}/app/consultation/expertiseSlots">
+                            <input type="hidden" name="specialisteId" value="${s.id}">
+                            <button type="submit" class="btn btn-primary">Voir créneaux</button>
+                        </form>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
 
-        function toggleActe(element) {
-            const acteId = element.getAttribute('data-id');
+    <!-- Étape 3 : Créneaux disponibles -->
+    <c:if test="${not empty creneaux}">
+        <div class="card">
+            <h3>🕒 Créneaux Disponibles</h3>
+            <form method="post" action="${pageContext.request.contextPath}/app/consultation/expertise/create">
+                <input type="hidden" name="specialisteId" value="${selectedSpecialiste.id}">
+                <input type="hidden" name="patientId" value="${patient.id}">
+                <div class="slot-grid">
+                    <c:forEach var="slot" items="${creneaux}">
+                        <div class="slot" onclick="selectSlot(this, '${slot}')">${slot}</div>
+                    </c:forEach>
+                </div>
+                <input type="hidden" id="selectedSlot" name="creneauChoisi">
 
-            if (selectedActes.includes(acteId)) {
-                selectedActes = selectedActes.filter(id => id !== acteId);
-                element.classList.remove('selected');
-            } else {
-                selectedActes.push(acteId);
-                element.classList.add('selected');
-            }
-        }
+                <label for="raison">Raison de la Demande</label>
+                <textarea id="raison" name="raison" rows="3" placeholder="Motif de la télé-expertise..." required></textarea>
 
-        document.querySelector('form').addEventListener('submit', function(e) {
-            // Supprimer les anciens champs actes
-            document.querySelectorAll('input[name="actes"]').forEach(input => input.remove());
+                <label for="observations">Observations médicales</label>
+                <textarea id="observations" name="observations" rows="3" placeholder="Notes cliniques ou contexte..." ></textarea>
 
-            // Ajouter les actes sélectionnés
-            selectedActes.forEach(acteId => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'actes';
-                input.value = acteId;
-                this.appendChild(input);
-            });
-        });
-    </script>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">📨 Envoyer la demande</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">⬅ Retour</button>
+                </div>
+            </form>
+        </div>
+    </c:if>
+
+</main>
+
+<script>
+    function selectSlot(el, value) {
+        document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('selectedSlot').value = value;
+    }
+</script>
+
 </body>
 </html>

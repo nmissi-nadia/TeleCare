@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary-blue: #2196F3;
+            --primary-blue: #5CAF50;
             --primary-green: #4CAF50;
-            --primary-purple: #9C27B0;
-            --accent-orange: #FF9800;
+            --primary-purple: #0ae82f;
+            --accent-orange: #f8d92b;
             --neutral-gray: #757575;
             --light-gray: #F5F5F5;
             --white: #FFFFFF;
