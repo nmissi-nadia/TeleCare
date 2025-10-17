@@ -30,4 +30,13 @@ public class UserDAO {
             em.close();
         }
     }
+    //function findById
+    public User findById(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.find(User.class, id);
+        } finally {
+            em.close();
+        }
+    }
 }
