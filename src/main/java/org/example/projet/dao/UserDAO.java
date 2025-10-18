@@ -2,9 +2,11 @@ package org.example.projet.dao;
 
 
 import org.example.projet.model.User;
+import org.example.projet.model.MedecinSpecialiste;
 import org.example.projet.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import java.util.List;
 
 public class UserDAO {
     public User findByLogin(String login) {
@@ -39,4 +41,29 @@ public class UserDAO {
             em.close();
         }
     }
+    public List<User> findAll() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT u FROM User u", User.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    public List<MedecinSpecialiste> findAllSpe() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT u FROM MedecinSpecialiste u", MedecinSpecialiste.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    public MedecinSpecialiste findByIdSpe(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.find(MedecinSpecialiste.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
 }

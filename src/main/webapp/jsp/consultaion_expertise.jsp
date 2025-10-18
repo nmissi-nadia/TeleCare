@@ -1,11 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Demande de Télé-Expertise - TeleCare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FullCalendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
     <style>
         :root {
             --primary-green: #4CAF50;
@@ -17,8 +23,6 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--light-beige); color: var(--dark-gray); }
-
-        .layout { display: flex; min-height: 100vh; }
 
         .sidebar {
             width: 280px;
@@ -70,40 +74,6 @@
         .btn-primary { background: var(--primary-green); color: var(--white); }
         .btn-primary:hover { background: #43a047; transform: translateY(-2px); }
         .btn-secondary { background: var(--neutral-gray); color: var(--white); }
-
-        .specialist-list { margin-top: 15px; }
-        .specialist-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: var(--white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .specialist-info h4 { margin-bottom: 5px; color: var(--primary-green); }
-        .specialist-info small { color: var(--neutral-gray); }
-
-        .slot-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .slot {
-            background: #f1f8f4;
-            border: 1px solid #a5d6a7;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .slot:hover { background: var(--primary-green); color: white; }
-        .slot.selected { background: var(--primary-green); color: white; border: none; }
     </style>
 </head>
 <body>
@@ -111,7 +81,7 @@
 <aside class="sidebar">
     <div class="sidebar-header">
         <h1>🌿 TeleCare</h1>
-        <div style="font-size: 14px; opacity: 0.8;">Expertise</div>
+        <div style="font-size: 14px; opacity: 0.8;">Médecin Généraliste</div>
     </div>
     <nav class="sidebar-nav">
         <a href="${pageContext.request.contextPath}/app/medecin/dashboard">🏠 Dashboard</a>
@@ -130,17 +100,19 @@
     <div class="card">
         <h3>🔍 Rechercher un Spécialiste</h3>
         <form method="get" action="${pageContext.request.contextPath}/app/consultation/expertise">
+            <input type="hidden" name="action" value="searchSpecialistes">
+            <input type="hidden" name="patientId" value="${patientId}">
+
             <label for="specialite">Spécialité</label>
             <select id="specialite" name="specialite" required>
                 <option value="">-- Sélectionner --</option>
-                <option value="CARDIOLOGIE">Cardiologie</option>
-                <option value="DERMATOLOGIE">Dermatologie</option>
-                <option value="PEDIATRIE">Pédiatrie</option>
-                <option value="NEUROLOGIE">Neurologie</option>
+                <c:forEach var="sp" items="${specialites}">
+                    <option value="${sp}">${sp}</option>
+                </c:forEach>
             </select>
 
             <label for="tarifMax">Tarif maximum (DH)</label>
-            <input type="number" id="tarifMax" name="tarifMax" placeholder="ex: 300">
+            <input type="number" id="tarifMax" name="maxTarif" placeholder="ex: 300">
 
             <button type="submit" class="btn btn-primary">Rechercher</button>
         </form>
@@ -155,10 +127,12 @@
                     <div class="specialist-card">
                         <div class="specialist-info">
                             <h4>${s.nom} ${s.prenom}</h4>
-                            <small>${s.specialite} • ${s.tarif} DH</small>
+                            <small>${s.specialite} • ${s.tarifExpertise} DH</small>
                         </div>
-                        <form method="get" action="${pageContext.request.contextPath}/app/consultation/expertiseSlots">
+                        <form method="get" action="${pageContext.request.contextPath}/app/consultation/expertise">
+                            <input type="hidden" name="action" value="slots">
                             <input type="hidden" name="specialisteId" value="${s.id}">
+                            <input type="hidden" name="patientId" value="${patientId}">
                             <button type="submit" class="btn btn-primary">Voir créneaux</button>
                         </form>
                     </div>
@@ -167,42 +141,63 @@
         </div>
     </c:if>
 
-    <!-- Étape 3 : Créneaux disponibles -->
+    <!-- Étape 3 : Affichage des créneaux avec calendrier -->
     <c:if test="${not empty creneaux}">
         <div class="card">
-            <h3>🕒 Créneaux Disponibles</h3>
-            <form method="post" action="${pageContext.request.contextPath}/app/consultation/expertise/create">
+            <h3>🗓️ Créneaux Disponibles</h3>
+            <div id="calendar"></div>
+
+            <form id="expertiseForm" method="post" action="${pageContext.request.contextPath}/app/consultation/expertise">
+                <input type="hidden" name="action" value="create">
                 <input type="hidden" name="specialisteId" value="${selectedSpecialiste.id}">
-                <input type="hidden" name="patientId" value="${patient.id}">
-                <div class="slot-grid">
-                    <c:forEach var="slot" items="${creneaux}">
-                        <div class="slot" onclick="selectSlot(this, '${slot}')">${slot}</div>
-                    </c:forEach>
-                </div>
+                <input type="hidden" name="patientId" value="${patientId}">
                 <input type="hidden" id="selectedSlot" name="creneauChoisi">
 
                 <label for="raison">Raison de la Demande</label>
-                <textarea id="raison" name="raison" rows="3" placeholder="Motif de la télé-expertise..." required></textarea>
+                <textarea id="raison" name="raison" rows="3" required></textarea>
 
                 <label for="observations">Observations médicales</label>
-                <textarea id="observations" name="observations" rows="3" placeholder="Notes cliniques ou contexte..." ></textarea>
+                <textarea id="observations" name="observations" rows="3"></textarea>
 
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align:center;margin-top:20px;">
                     <button type="submit" class="btn btn-primary">📨 Envoyer la demande</button>
-                    <button type="button" class="btn btn-secondary" onclick="history.back()">⬅ Retour</button>
                 </div>
             </form>
         </div>
     </c:if>
-
 </main>
 
 <script>
-    function selectSlot(el, value) {
-        document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
-        el.classList.add('selected');
-        document.getElementById('selectedSlot').value = value;
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        if (!calendarEl) return;
+
+        const creneaux = [
+            <c:forEach var="c" items="${creneaux}" varStatus="status">
+            {
+                title: 'Créneau (${c.tarif} DH)',
+                start: '${c.dateDisponibilite}T${c.heureDebut}',
+                end: '${c.dateDisponibilite}T${c.heureFin}',
+                color: '${c.disponible ? "#4CAF50" : "#f44336"}',
+                disponible: ${c.disponible}
+            }<c:if test="${!status.last}">,</c:if>
+            </c:forEach>
+        ];
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 650,
+            locale: 'fr',
+            selectable: true,
+            events: creneaux,
+            eventClick: function(info) {
+                const slot = info.event.startStr + " - " + info.event.endStr;
+                document.getElementById('selectedSlot').value = slot;
+                alert("✅ Créneau sélectionné : " + slot);
+            }
+        });
+        calendar.render();
+    });
 </script>
 
 </body>

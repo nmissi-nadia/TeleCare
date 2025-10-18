@@ -73,6 +73,7 @@
         <nav class="sidebar-nav">
             <a href="${pageContext.request.contextPath}/app/specialiste/dashboard" class="active">Dashboard</a>
             <a href="${pageContext.request.contextPath}/jsp/home.jsp">Accueil</a>
+            <a href="${pageContext.request.contextPath}/app/specialiste/profil" class="btn btn-success">Configurer mon profil</a>
             <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
         </nav>
     </aside>

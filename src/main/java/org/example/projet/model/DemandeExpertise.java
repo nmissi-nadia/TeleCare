@@ -6,37 +6,38 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "demandes_expertise")
 public class DemandeExpertise {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String raison;
 
-    @Column
+    @Column(name = "specialite_demandee", nullable = false)
     private String specialiteDemandee;
 
-    @Column
+    @Column(nullable = false)
     private String statut; // EN_ATTENTE, ACCEPTEE, REFUSEE
 
-    @Column
+    @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
 
-    @Column
+    @Column(name = "date_reponse")
     private LocalDateTime dateReponse;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String observations;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String diagnostic;
+
+    @Column(name = "raison_refus")
+    private String raisonRefus;
 
     @OneToOne
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
-
-    @Column
-    private String raisonRefus;
 
     @ManyToOne
     @JoinColumn(name = "medecin_generaliste_id")
@@ -46,13 +47,13 @@ public class DemandeExpertise {
     @JoinColumn(name = "medecin_specialiste_id")
     private MedecinSpecialiste medecinSpecialiste;
 
-    // Constructeurs
+    // --- Constructeurs ---
     public DemandeExpertise() {
         this.dateCreation = LocalDateTime.now();
         this.statut = "EN_ATTENTE";
     }
 
-    // Getters et Setters
+    // --- Getters et Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -77,6 +78,9 @@ public class DemandeExpertise {
     public String getDiagnostic() { return diagnostic; }
     public void setDiagnostic(String diagnostic) { this.diagnostic = diagnostic; }
 
+    public String getRaisonRefus() { return raisonRefus; }
+    public void setRaisonRefus(String raisonRefus) { this.raisonRefus = raisonRefus; }
+
     public Consultation getConsultation() { return consultation; }
     public void setConsultation(Consultation consultation) { this.consultation = consultation; }
 
@@ -86,6 +90,15 @@ public class DemandeExpertise {
     public MedecinSpecialiste getMedecinSpecialiste() { return medecinSpecialiste; }
     public void setMedecinSpecialiste(MedecinSpecialiste medecinSpecialiste) { this.medecinSpecialiste = medecinSpecialiste; }
 
-    public String getRaisonRefus() { return raisonRefus; }
-    public void setRaisonRefus(String raisonRefus) { this.raisonRefus = raisonRefus; }
+    // --- Méthodes utilitaires ---
+    @Override
+    public String toString() {
+        return "DemandeExpertise{" +
+                "id=" + id +
+                ", specialiteDemandee='" + specialiteDemandee + '\'' +
+                ", statut='" + statut + '\'' +
+                ", medecinGeneraliste=" + (medecinGeneraliste != null ? medecinGeneraliste.getNom() : "null") +
+                ", medecinSpecialiste=" + (medecinSpecialiste != null ? medecinSpecialiste.getNom() : "null") +
+                '}';
+    }
 }

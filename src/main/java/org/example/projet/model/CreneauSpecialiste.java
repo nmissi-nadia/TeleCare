@@ -5,15 +5,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "creneaux_specialiste")
+@Table(name = "creneaux_specialistes")
 public class CreneauSpecialiste {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Lien direct vers User (spécialiste)
     @ManyToOne
-    @JoinColumn(name = "specialiste_id")
+    @JoinColumn(name = "specialiste_id", nullable = false)
     private User specialiste;
 
     @Column(nullable = false)
@@ -31,7 +32,6 @@ public class CreneauSpecialiste {
     @Column(nullable = false)
     private boolean disponible = true;
 
-    // --- Constructeurs, getters, setters ---
     public CreneauSpecialiste() {}
 
     public CreneauSpecialiste(User specialiste, LocalDate date, LocalTime debut, LocalTime fin, Double tarif) {
@@ -40,12 +40,12 @@ public class CreneauSpecialiste {
         this.heureDebut = debut;
         this.heureFin = fin;
         this.tarif = tarif;
-        this.disponible = true;
     }
 
+    // --- Getters & Setters ---
     public Long getId() { return id; }
-    //setId
     public void setId(Long id) { this.id = id; }
+
     public User getSpecialiste() { return specialiste; }
     public void setSpecialiste(User specialiste) { this.specialiste = specialiste; }
 
