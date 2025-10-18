@@ -10,7 +10,8 @@
 
     <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales-all.global.min.js"></script>
 
     <style>
         :root {
@@ -142,29 +143,39 @@
     </c:if>
 
     <!-- Étape 3 : Affichage des créneaux avec calendrier -->
-    <c:if test="${not empty creneaux}">
-        <div class="card">
+     <c:choose>
+        <c:when test="${not empty creneaux}">
+            <div class="card">
+                <h3>🗓️ Créneaux Disponibles</h3>
+                <div id="calendar"></div>
+
+                <form id="expertiseForm" method="post" action="${pageContext.request.contextPath}/app/consultation/expertise">
+                    <input type="hidden" name="action" value="create">
+                    <input type="hidden" name="specialisteId" value="${selectedSpecialiste.id}">
+                    <input type="hidden" name="patientId" value="${patientId}">
+                    <input type="hidden" id="selectedSlot" name="creneauChoisi">
+
+                    <label for="raison">Raison de la Demande</label>
+                    <textarea id="raison" name="raison" rows="3" required></textarea>
+
+                    <label for="observations">Observations médicales</label>
+                    <textarea id="observations" name="observations" rows="3"></textarea>
+                    <label for="question">Questions médicales</label>
+                    <textarea id="question" name="question" rows="3"></textarea>
+
+                    <div style="text-align:center;margin-top:20px;">
+                        <button type="submit" class="btn btn-primary">📨 Envoyer la demande</button>
+                    </div>
+                </form>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="card">
             <h3>🗓️ Créneaux Disponibles</h3>
-            <div id="calendar"></div>
-
-            <form id="expertiseForm" method="post" action="${pageContext.request.contextPath}/app/consultation/expertise">
-                <input type="hidden" name="action" value="create">
-                <input type="hidden" name="specialisteId" value="${selectedSpecialiste.id}">
-                <input type="hidden" name="patientId" value="${patientId}">
-                <input type="hidden" id="selectedSlot" name="creneauChoisi">
-
-                <label for="raison">Raison de la Demande</label>
-                <textarea id="raison" name="raison" rows="3" required></textarea>
-
-                <label for="observations">Observations médicales</label>
-                <textarea id="observations" name="observations" rows="3"></textarea>
-
-                <div style="text-align:center;margin-top:20px;">
-                    <button type="submit" class="btn btn-primary">📨 Envoyer la demande</button>
-                </div>
-            </form>
-        </div>
-    </c:if>
+            <p>Aucun créneau disponible pour ce spécialiste.</p>
+            </div>
+        </c:otherwise>
+    </c:choose>
 </main>
 
 <script>
@@ -198,6 +209,8 @@
         });
         calendar.render();
     });
+        console.log('FullCalendar global:', window.FullCalendar);
+    console.log('Creneaux events:', creneaux);
 </script>
 
 </body>

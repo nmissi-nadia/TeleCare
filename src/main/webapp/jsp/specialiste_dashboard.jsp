@@ -74,6 +74,8 @@
             <a href="${pageContext.request.contextPath}/app/specialiste/dashboard" class="active">Dashboard</a>
             <a href="${pageContext.request.contextPath}/jsp/home.jsp">Accueil</a>
             <a href="${pageContext.request.contextPath}/app/specialiste/profil" class="btn btn-success">Configurer mon profil</a>
+            <!-- lien vers la page des demandes -->
+            <a href="${pageContext.request.contextPath}/app/specialiste/demandes">Demandes</a>
             <a href="${pageContext.request.contextPath}/logout">Déconnexion</a>
         </nav>
     </aside>

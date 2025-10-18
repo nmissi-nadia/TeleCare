@@ -122,6 +122,7 @@ public class demandeexpertiseServlet extends HttpServlet {
             String patientId = req.getParameter("patientId");
             String raison = req.getParameter("raison");
             String observations = req.getParameter("observations");
+            String question = req.getParameter("question");
 
             MedecinSpecialiste specialiste = specialisteDAO.findByIdSpe(specialisteId);
 
