@@ -291,7 +291,4 @@ classDiagram
 **🧑‍💻 NMISSI NADIA**
 Encadré par **YouCode**
 
----
 
-Souhaites-tu que je te génère aussi le **diagramme UML (classes + cas d’utilisation)** à inclure dans ce README (en image ou en texte PlantUML) ?
-Ça rendrait le document encore plus complet et professionnel.
